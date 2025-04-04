@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+    <head>
+
+    </head>
+    <body>    
+
+     <script>
+
+            let equalizer = {
+                presets: new Map(),
+                adjustements: new Map(),
+                inputFile: ""
+            }
+        
+           let classicalAdjustements = new Map();
+           classicalAdjustements.set('Preamp','12.0');
+           classicalAdjustements.set('31.25 Hz', '12.0');
+           classicalAdjustements.set('62.5 Hz', '12.0');
+           classicalAdjustements.set('2550 Hz', '12.0');
+           classicalAdjustements.set('16 Hz', '12.0');
+
+           equalizer.inputFile = 'una ruta';
+
+           equalizer.presets.set('classical', classicalAdjustements);
+     </script>
+        
+    </body>
+    </html>

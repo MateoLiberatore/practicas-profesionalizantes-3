@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Calculadora</title>
+
+    <style>
+    .body { height: 300px; width: 210px; text-align: center; }
+    .input { height: 40px; width: 85%; margin-left: 6px; text-align: right; font-size: 18px; }
+    .table { width: 100%; margin-top: 10px; }
+    .button { font-family: arial; font-weight: bold; font-size: 100%; border-radius: 6px; width: 35px; height: 35px; margin-top: 10px; color: white; }
+    #rojo { width: 90%; background-color: #fa0404; box-shadow: 0px 5px #900505; }
+    #azul { background-color: #0064ff; box-shadow: 0px 5px #033f9d; }
+    #verde { background-color: #6cee00; box-shadow: 0px 5px #429001; }
+    #amarillo { background-color: #f1e300; box-shadow: 0px 5px #b2a803; }
+    </style>
+</head>
+<body class="body">
+
+    <input class="input" type="text" id="pantalla" disabled>
+
+    <table class="table">
+        <tr>
+            <td><button class="button" id="azul" onclick="agregarValor('1')">1</button></td>
+            <td><button class="button" id="azul" onclick="agregarValor('2')">2</button></td>
+            <td><button class="button" id="azul" onclick="agregarValor('3')">3</button></td>
+            <td><button class="button" id="verde" onclick="agregarValor('+')">+</button></td>
+        </tr>
+        <tr>
+            <td><button class="button" id="azul" onclick="agregarValor('4')">4</button></td>
+            <td><button class="button" id="azul" onclick="agregarValor('5')">5</button></td>
+            <td><button class="button" id="azul" onclick="agregarValor('6')">6</button></td>
+            <td><button class="button" id="verde" onclick="agregarValor('-')">-</button></td>
+        </tr>
+        <tr>
+            <td><button class="button" id="azul" onclick="agregarValor('7')">7</button></td>
+            <td><button class="button" id="azul" onclick="agregarValor('8')">8</button></td>
+            <td><button class="button" id="azul" onclick="agregarValor('9')">9</button></td>
+            <td><button class="button" id="verde" onclick="agregarValor('*')">*</button></td>
+        </tr>
+        <tr>
+            <td><button class="button" id="azul" onclick="agregarValor('0')">0</button></td>
+            <td><button class="button" id="azul" onclick="agregarValor('.')">.</button></td>
+            <td><button class="button" id="amarillo" onclick="calcularResultado()">=</button></td>
+            <td><button class="button" id="verde" onclick="agregarValor('/')">/</button></td>
+        </tr>
+    </table>
+
+    <button class="button" id="rojo" onclick="borrar()">Borrar</button>
+
+    <script>
+        function agregarValor(valor) {
+            document.getElementById("pantalla").value += valor;
+        }
+
+        function calcularResultado() {
+            document.getElementById("pantalla").value = eval(document.getElementById("pantalla").value);
+        }
+
+        function borrar() {
+            document.getElementById("pantalla").value = "";
+        }
+    </script>
+
+</body>
+</html>

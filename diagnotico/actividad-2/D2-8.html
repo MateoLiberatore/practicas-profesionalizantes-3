@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html>
+    <head>
+
+    </head>
+    <body>    
+
+     <script>
+
+         let game = {
+            party : new Map(),
+            enemy : new Map(),
+            map_elements : new Map()
+         }
+         let vikings = [];
+         let olaf = new Object(
+            this.type = 'character', 
+            this.name = 'olaf',
+            this.stats = {
+                dmg : 4,
+                hp : 3,
+            },
+            this.inventory = {
+                slot_1 : 'red key',
+                slot_2 : 'yellow key',
+                slot_3 : 'red vegetable',
+                slot_4 : 'shield'
+            }
+         );
+
+         let ragnar  = new Object(
+            this.type = 'character', 
+            this.name = 'ragnar',
+            this.stats = {
+                dmg : 4,
+                hp : 3,
+            },
+            this.inventory = {
+                slot_1 : '',
+                slot_2 : '',
+                slot_3 : '',
+                slot_4 : ''
+            }
+         );
+
+         let ramon = new Object(
+            this.type = 'character', 
+            this.name = 'ramon',
+            this.stats = {
+                dmg : 4,
+                hp : 3,
+            },
+            this.inventory = {
+                slot_1 : '',
+                slot_2 : '',
+                slot_3 : '',
+                slot_4 : ''
+            }
+         );
+
+         vikings.push(olaf);
+         vikings.push(ragnar);
+         vikings.push(ramon);
+         game.party.set(vikings);
+        
+        let monster = [];
+        let snail = new Object(
+            this.type = 'enemy',
+            this.name = 'snail',
+            this.stats = {
+                hp : 3,
+                dmg : 1,
+                droppable_item : 'slime'
+            }
+        );
+        
+        monster.push(snail);
+        game.enemy.set(monster);
+
+        let elements = [];
+        let red_lock = new Object(
+        this.type = 'lock',    
+        this.name = 'red lock',
+        this.key = 'red key'
+        );
+        
+        elements.push(red_lock)
+        game.map_elements.set(elements);
+     </script>
+        
+    </body>
+    </html>

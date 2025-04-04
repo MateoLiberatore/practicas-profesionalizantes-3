@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+    <head>
+
+    </head>
+    <body>
+        
+        <script>
+
+            let coffee_machine = {
+                state: new Map(),
+                action_buttons : new Map(),
+                sensors : new Map()
+            }
+            let actions = new Map();
+            actions.set('power up')
+            actions.set('instert coin');
+            actions.set('coin return');
+            actions.set('button pushed');
+            actions.set('reset button');
+
+            coffee_machine.action_buttons.set(actions);
+
+            let states = new Map();
+            states.set('idle');
+            states.set('inserting coins');
+            states.set('user choose');
+            states.set('make coffee');
+            states.set('service needed');
+
+            coffee_machine.state.set(states);
+
+            let sensor = new Map();
+            sensors.set('no cups');
+            sensors.set('no coffee');
+            sensors.set('jammed');
+            sensors.set('amount entered');
+
+            coffee_machine.sensors.set(sensor);
+        </script>
+
+    </body>
+</html>

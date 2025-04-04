@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+    <head>
+
+    </head>
+    <body>    
+
+     <script>
+
+            let config_menu = {
+                gameplay_config : {},
+                keyboard_config : {
+                    movement_config : new Map(),
+                    combat_config : new Map()
+                },
+                mouse_config : {},
+                gamepad_config : {},
+                audio_config : {},
+                video_config : {}
+            }
+
+            let movement = new Map();
+            movement.set('move foward','w');
+            movement.set('move back','s');
+            movement.set('move left','a');
+            movement.set('move right','d');
+            movement.set('sprint','shift');
+            movement.set('jump','space');
+            movement.set('duck','ctrl');
+
+            config_menu.keyboard_config.movement_config.set(movement);
+
+            let combat = new Map();
+            combat.set('primary attack','mouse1');
+            combat.set('secondary attack','mouse2');
+            combat.set('reload weapon', 'r');
+
+            config_menu.keyboard_config.movement_config.set(combat);
+            
+     </script>
+        
+    </body>
+    </html>

@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Calculadora</title>
+
+    <style>
+    .body { height: 300px; width: 210px; text-align: center; }
+    .input { height: 40px; width: 85%; margin-left: 6px; text-align: right; font-size: 18px; }
+    .table { width: 100%; margin-top: 10px; }
+
+    .red_button { font-family: arial; font-weight: bold; font-size: 100%; border-radius: 6px; width: 35px; height: 35px; margin-top: 10px; 
+        color: white; width: 90%; background-color: #fa0404; box-shadow: 0px 5px #900505; }
+
+    .blue_button { font-family: arial; font-weight: bold; font-size: 100%; border-radius: 6px; width: 35px; height: 35px; margin-top: 10px; 
+        color: white; background-color: #0064ff; box-shadow: 0px 5px #033f9d;}
+
+    .green_button { font-family: arial; font-weight: bold; font-size: 100%; border-radius: 6px; width: 35px; height: 35px; margin-top: 10px; 
+        color: white; background-color: #6cee00; box-shadow: 0px 5px #429001; }
+
+    .yellow_button { font-family: arial; font-weight: bold; font-size: 100%; border-radius: 6px; width: 35px; height: 35px; margin-top: 10px; 
+        color: white; background-color: #f1e300; box-shadow: 0px 5px #b2a803; }
+
+    </style>
+</head>
+<body class="body">
+
+    <input class="input" type="text" id="display" disabled>
+
+    <table class="table">
+        <tr>
+            <td><button class="blue_button" id="button1">1</button></td>
+            <td><button class="blue_button" id="button2" >2</button></td>
+            <td><button class="blue_button" id="button3" >3</button></td>
+            <td><button class="green_button" id="button_plus" >+</button></td>
+        </tr>
+        <tr>
+            <td><button class="blue_button" id="button4" >4</button></td>
+            <td><button class="blue_button" id="button5" >5</button></td>
+            <td><button class="blue_button" id="button6" >6</button></td>
+            <td><button class="green_button" id="button_minus" >-</button></td>
+        </tr>
+        <tr>
+            <td><button class="blue_button" id="button7" >7</button></td>
+            <td><button class="blue_button" id="button8" >8</button></td>
+            <td><button class="blue_button" id="button9" >9</button></td>
+            <td><button class="green_button" id="button_multi" >*</button></td>
+        </tr>
+        <tr>
+            <td><button class="blue_button" id="button0" >0</button></td>
+            <td><button class="blue_button" id="button_dot" >.</button></td>
+            <td><button class="yellow_button" id="button_equal" >=</button></td>
+            <td><button class="green_button" id="button_division" >/</button></td>
+        </tr>
+    </table>
+
+    <button class="red_button" id="button_delete" onclick="borrar()">Borrar</button>
+
+    <script>
+        function onButton1_click() {
+            let display = document.getElementById('display');
+            display.value += '1';
+        }
+    
+        function onButton2_click() {
+            let display = document.getElementById('display');
+            display.value += '2';
+        }
+    
+        function onButton3_click() {
+            let display = document.getElementById('display');
+            display.value += '3';
+        }
+    
+        function onButton4_click() {
+            let display = document.getElementById('display');
+            display.value += '4';
+        }
+    
+        function onButton5_click() {
+            let display = document.getElementById('display');
+            display.value += '5';
+        }
+    
+        function onButton6_click() {
+            let display = document.getElementById('display');
+            display.value += '6';
+        }
+    
+        function onButton7_click() {
+            let display = document.getElementById('display');
+            display.value += '7';
+        }
+    
+        function onButton8_click() {
+            let display = document.getElementById('display');
+            display.value += '8';
+        }
+    
+        function onButton9_click() {
+            let display = document.getElementById('display');
+            display.value += '9';
+        }
+    
+        function onButton0_click() {
+            let display = document.getElementById('display');
+            display.value += '0';
+        }
+    
+        function onButton_plus_click() {
+            let display = document.getElementById('display');
+            display.value += '+';
+        }
+    
+        function onButton_minus_click() {
+            let display = document.getElementById('display');
+            display.value += '-';
+        }
+    
+        function onButton_multi_click() {
+            let display = document.getElementById('display');
+            display.value += '*';
+        }
+    
+        function onButton_division_click() {
+            let display = document.getElementById('display');
+            display.value += '/';
+        }
+    
+        function onButton_dot_click() {
+            let display = document.getElementById('display');
+            display.value += '.';
+        }
+    
+        function onButton_equal_click() {
+            let display = document.getElementById('display');
+            display.value = eval(display.value);
+        }
+    
+        function onButton_delete_click() {
+            let display = document.getElementById('display');
+            display.value = '';
+        }
+        document.getElementById('button1').onclick = onButton1_click;
+        document.getElementById('button2').onclick = onButton2_click;
+        document.getElementById('button3').onclick = onButton3_click;
+        document.getElementById('button4').onclick = onButton4_click;
+        document.getElementById('button5').onclick = onButton5_click;
+        document.getElementById('button6').onclick = onButton6_click;
+        document.getElementById('button7').onclick = onButton7_click;
+        document.getElementById('button8').onclick = onButton8_click;
+        document.getElementById('button9').onclick = onButton9_click;
+        document.getElementById('button0').onclick = onButton0_click;
+        document.getElementById('button_plus').onclick = onButton_plus_click;
+        document.getElementById('button_minus').onclick = onButton_minus_click;
+        document.getElementById('button_multi').onclick = onButton_multi_click;
+        document.getElementById('button_division').onclick = onButton_division_click;
+        document.getElementById('button_dot').onclick = onButton_dot_click;
+        document.getElementById('button_equal').onclick = onButton_equal_click;
+        document.getElementById('button_delete').onclick = onButton_delete_click;
+    
+    </script>
+    
+    
+
+</body>
+</html>

@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+    <head>
+
+    </head>
+    <body>    
+
+     <script>
+      const circuito = {
+        inputs: ["A", "B", "C"],
+        gates: [
+        { type: "AND", inputs: ["A", "B", "C"], output: "output_1" },
+        { type: "NOT", inputs: ["A"], output: "output_2" },
+        { type: "NOT", inputs: ["B"], output: "output_3" },
+        { type: "OR", inputs: ["output_2", "output_3"], output: "output_4" },
+        { type: "AND", inputs: ["output_4", "C"], output: "output_5" },
+        { type: "OR", inputs: ["output_1", "output_5"], output: "final_output" }
+    ],
+    output: "OUTPUT"
+};
+
+     </script>
+        
+    </body>
+    </html>

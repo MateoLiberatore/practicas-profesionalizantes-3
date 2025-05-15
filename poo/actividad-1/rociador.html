@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+<meta charset="utf-8" />
+<title>Spray</title>
+</head>
+<style type="text/css">
+   table,td,tr
+   {
+      border:1px solid black;
+      border-collapse: collapse;
+   }
+</style>
+
+<body>
+   <h3>Object: Spray</h3>
+   <table>
+      <tr>
+         <td>Capacity</td>
+         <td><input id="capacity" type="text"></td>
+      </tr>
+      <tr>
+         <td>Volume</td>
+         <td><progress id="volume">0%</progress></td>
+      </tr>
+       <tr>
+         <td>SprayedVolume </td>
+         <td><input id="sprayedVolume" type="text"></td>
+      </tr>
+   </table>
+   <button id="sprayBtn">Spray</button>
+   <button id="chargeBtn">Charge</button>
+   <button id="emptyBtn">Empty</button>
+</body>
+
+<script type="text/javascript">
+
+function getObjectProperties( sprayObject )
+{
+   let properties =
+   {
+      capacity: sprayObject.capacity,
+      volume: sprayObject.volume,
+      sprayedVolume: sprayObject.sprayedVolume
+   }
+
+   return properties;
+}
+
+function updateGUI(sprayDataObject)
+{
+   let capacityInput = document.getElementById("capacity");
+   let volumeInput = document.getElementById("volume");
+   let sprayedInput = document.getElementById("sprayedVolume");
+
+   capacityInput.value = sprayDataObject.capacity;
+   volumeInput.max = sprayDataObject.capacity;
+   volumeInput.value = sprayDataObject.volume;
+   volumeInput.innerText = (sprayDataObject.volume/sprayDataObject.capacity)*100;
+   sprayedInput.value = sprayDataObject.sprayedVolume;
+}
+
+function initGUI( sprayObject )
+{
+      let spray = document.getElementById('sprayBtn');
+     let charge = document.getElementById('chargeBtn');
+     let empty = document.getElementById('emptyBtn');
+
+      spray.onclick = () => 
+      { 
+         sprayObject.spray();
+         updateGUI( getObjectProperties(sprayObject));
+      };
+
+      charge.onclick = () => 
+      { 
+         let value = prompt('Ingrese cantidad en ML');
+         sprayObject.charge(parseFloat(value));
+         updateGUI( getObjectProperties(sprayObject));
+      };
+      
+      empty.onclick = () =>
+      { 
+         sprayObject.empty();
+          updateGUI( getObjectProperties(sprayObject));
+      };
+
+      updateGUI( getObjectProperties(sprayObject));
+}
+
+
+
+class Spray
+{
+   constructor()
+   {
+      //Estado inicial
+      this._capacity = 750.0;
+      this._volume = 0;
+      this._sprayedVolume = 10.0;
+   }
+
+   get volume()
+   {
+      return this._volume;
+   }
+
+   set volume( value )
+   {
+      if ( value <= this._capacity && value >= 0 )
+      {
+         this._volume = value;
+      }
+      else
+      {
+         console.log('Volume cannot be more than '+ this._capacity + ' or less than 0' );
+      }
+   }
+
+   get sprayedVolume()
+   {
+      return this._sprayedVolume;
+   }
+
+   get capacity()
+   {
+      return this._capacity;
+   }
+
+
+   charge( value )
+   {
+      //Flexible (Cargar hasta donde se puede)
+
+      if ( value >= 0 )
+      {
+         if ( (this._volume + value) >= this._capacity )
+         {
+            this._volume = this._capacity;
+         }
+         else
+         {
+            this._volume += value;
+         }
+      }
+      else
+      {
+         console.log('Value must be greather than 0');
+      }
+   }
+
+   spray()
+   {
+      if ( this._volume > 0 )
+      {
+         if ( this._volume >= this._sprayedVolume )
+         {
+             this._volume -= this._sprayedVolume; 
+         }
+         else if ( this._volume <= this._sprayedVolume )
+         {
+            this._volume = 0;
+         }
+      }
+      else
+      {
+         console.log('Spray is empty')
+      }
+   }
+
+   empty()
+   {
+       this._volume = 0;  
+   }
+
+
+}
+
+
+function main()
+{
+   let sprayObject = new Spray();
+   initGUI(sprayObject);
+
+}
+
+
+window.onload = main;
+</script>
+</html>

@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <style>
+            
+            .semaforo{
+                background-color: grey;
+                height: 520px; width: 300px;
+                border-radius: 50px;
+                border-collapse: collapse;
+                margin:auto;
+                margin-top: 100px;
+                box-shadow: inset 0px 0px 50px rgba(0, 0, 0, 100);
+            }
+            .semaforo td {text-align: center;}
+            .semaforo span {height: 135px; width: 135px; 
+                display:inline-block; border-radius: 100%;
+            }
+            #green{ background-color: green; box-shadow : inset 0px 0px 25px rgba(0, 0, 0, 76);}
+            #red{ background-color: red;box-shadow : inset 0px 0px 25px rgba(0, 0, 0, 76);}
+            #yellow{background-color: yellow;box-shadow : inset 0px 0px 25px rgba(0, 0, 0, 76);}
+        </style>
+    </head>
+    
+    
+    <body>
+
+        <table class="semaforo">
+            <tr><td><span id="red">&nbsp;</span></td></tr>
+            <tr><td><span id="yellow">&nbsp;</span></td></tr>
+            <tr><td><span id="green">&nbsp;</span></td></tr>
+        </table>
+    </body>
+    <script>
+        class Semaforo {
+            constructor() {
+                this.timer = 0;
+            }
+
+            getState() {
+                return this.state;
+            }
+
+            setState(newState) {
+                this.state = newState;
+            }
+
+            getTimer() {
+                return this.timer;
+            }
+
+            setTimer(newTimer) {
+                this.timer = newTimer;
+            }
+
+            light_manager() {
+                const red = document.getElementById("red");
+                const yellow = document.getElementById("yellow");
+                const green = document.getElementById("green");
+
+                let seconds = 0;
+
+                const second_counter = setInterval(() => {
+                    seconds++;
+
+                    if (seconds > 20) seconds = 1;
+
+                    if (seconds >= 1 && seconds <= 10) 
+                    {
+                        red.style.backgroundColor = "#ff1f1f"; // Rojo
+                    } 
+                    else 
+                    {
+                        red.style.backgroundColor = "#4a0101"; // Rojo apagado
+                    }
+
+
+                    if (seconds >= 8 && seconds <= 10) 
+                    {
+                        yellow.style.backgroundColor = "yellow";
+                    } 
+                    else
+                    {
+                        yellow.style.backgroundColor = "#6d5e00";
+                    }
+
+
+                    if (seconds >= 11 && seconds <= 20) 
+                    {
+                        green.style.backgroundColor = "#75ff00"; 
+                    } 
+                    else 
+                    {
+                        green.style.backgroundColor = "#1d3f00"; 
+                    }
+
+                    
+                    if (seconds >= 17 && seconds <= 20) 
+                    {
+                        yellow.style.backgroundColor = "yellow";
+                    }
+
+                }, 1000);
+            }
+        }
+
+        const semaforo = new Semaforo();
+        semaforo.light_manager();
+
+
+    </script>
+</html>
+
+<!-- 
+
+properties:
+
+state string;
+timer int
+------------
+
+methods:
+
+light_manager
+
+
+-->

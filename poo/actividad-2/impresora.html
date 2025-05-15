@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <style type="text/css">
+            .table_container
+            {
+                width: 550px;
+                height: 220px;
+                position: absolute;
+                top: 25%;
+                left: 50%;
+                transform: translate(-50%, -50%);
+                background-color: lightgrey;
+                border-radius: 15px;
+                font-family: 'Courier New', Courier, monospace;
+            }
+            table
+            {
+                margin-top: 10px;
+                border-collapse: collapse; 
+                width: 500px; height: 150px;
+                background-color:cadetblue ;
+                border-radius: 5px;
+                position: absolute;
+                top: 50%;
+                left: 50%;
+                transform: translate(-50%, -50%);
+            }
+
+            h2
+            {
+                margin-top: 25px;
+                width: 50%;
+                height: 20px;
+                margin-left: auto; margin-right: auto;
+                text-align: center;
+                padding-top: 4px;
+                font-weight: bold; font-size: 16px;
+                background-color: cadetblue;
+                border-top-left-radius: 15px;
+                border-top-right-radius: 15px;
+
+
+            }
+            #first_row{font-size: 15px;}
+
+            td{border:1px solid transparent; border-collapse: collapse; border-radius: 15px; }
+            .first_column { width: 120px; text-align: center; font-weight:600;}
+            
+            .progress { width: 95% ; margin-left: 3%; margin-right: 1%; margin-top: 10px; margin-bottom: 1px;}
+            progress { -webkit-appearance: none;  appearance: none; width: 300px; height: 20px; border-radius: 10px;} 
+            /* ******* opera, a veces mantiene los estilos por mas que los modifiques, por eso hay que borrarlos y hacerlos de nuevo */
+            progress::-webkit-progress-bar 
+            { background-color: grey; border-radius: 10px; height: 12px;}
+            progress::-webkit-progress-value 
+            { background-color: bisque; border-radius: 10px;}
+
+            .display {width: 40px; text-align:center;  border-radius: 15px; background-color: bisque; padding-left: 15px; padding-top: 2px;}
+
+            .button { border-radius: 10px; font-family: inherit; font-size: 15px; height: 21px; margin-bottom: 1px; margin-top: 2px; padding: 1px; background-color: bisque; }
+            
+            span {background-color: grey; float: right; margin-right: 40%; border-radius: 20%; width: 20px;}
+
+        </style>
+    </head>
+<body>    
+        <div class="table_container">    
+            <table>
+                <h2>Printer Control Panel:</h2>
+
+                <tr>
+                    <td class="first_column" id="first_row">Ink remaning: </td>
+                    <td><progress id = "ink_volume" value="0" max="100" class="progress"> 0% </progress></td>
+                </tr>
+
+                <tr>
+                    <td class="first_column">Paper: </td>
+                    <td><input id = "paper_amount" type="number" class="display" disabled></input></td>
+                </tr>
+
+                <tr>
+                    <td rowspan="3" class="first_column">Sensors:</td>
+                    <td>ON: <span id="on_sensor">&nbsp;</span></td>
+                </tr>
+
+                <tr>
+                    <td>Paper: <span id="paper_sensor">&nbsp;</span></td>
+                    <!-- espacio en blanco para que "existan en pantalla" -->
+                </tr>
+
+                <tr>
+                    <td>Ink: <span id="ink_sensor">&nbsp;</span></td>
+                </tr>
+
+                <tr>
+                    <td class="first_column">
+                        <button class="button" id="on/offBTN">on-off</button>
+                        
+                    </td>
+
+                    <td >
+                        <button class="button" id="printBTN">Print</button>
+                        <button class="button" id="cartridgeBTN">Replace Cartdrige</button>
+                        <button class="button" id="paperBTN">Replenish paper</button>
+                    </td> 
+                </tr>  
+            </table>
+        </div>
+</body>
+<script>
+        
+        function updateSensors(printerObject)
+        {
+            const on_sensor = document.getElementById("on_sensor");
+            const paper_sensor = document.getElementById("paper_sensor");
+            const ink_sensor = document.getElementById("ink_sensor"); 
+            //const ink_progress_sensor = document.getElementById("ink_volume");
+
+            //if(printerObject.on)
+            //{
+            //    ink_progress_sensor.style.backgroundColor = "bisque";
+            //}
+            //else
+            //{
+            //    ink_progress_sensor.style.backgroundColor = "bisque";
+            //}
+            // se buguea, pierde nocion de los estilos que se le aplican, casi confirmado que es el navegador Opera;
+
+            if (printerObject.on) 
+            {
+                on_sensor.style.backgroundColor = "palegreen";
+            } 
+            else 
+            {
+                on_sensor.style.backgroundColor = "salmon";
+            }
+
+
+            if (printerObject.on && printerObject.paper_amount > 0) 
+            {
+                paper_sensor.style.backgroundColor = "palegreen";
+            }
+            else if (printerObject.on && printerObject.paper_amount === 0) 
+            {
+                paper_sensor.style.backgroundColor = "salmon";
+            } 
+            else 
+            {
+                paper_sensor.style.backgroundColor = "grey";
+            }
+
+            
+            if (printerObject.on && printerObject.ink_volume > 0) 
+            {
+                ink_sensor.style.backgroundColor = "palegreen";
+            } 
+            else if (printerObject.on && printerObject.ink_volume === 0) 
+            {
+                ink_sensor.style.backgroundColor = "salmon";
+            } 
+            else
+            {
+                ink_sensor.style.backgroundColor = "grey";
+            }
+        }
+
+        function getObjectProperties ( printerObject)
+        {
+            let properties =
+            {
+                current_ink : printerObject.ink_volume,
+                current_paper : printerObject.paper_amount,
+                on : printerObject.on
+            };
+
+            return properties;
+        }
+
+        function updateGUI(printerDataObject)
+        {
+            let inkInput = document.getElementById("ink_volume");
+            let paperInput = document.getElementById("paper_amount");
+            let printsInput = document.getElementById("printBTN");
+            let on_off = document.getElementById("on/offBTN");
+            let replenish_cartdrige = document.getElementById('cartridgeBTN'); 
+            let replenish_paper = document.getElementById('paperBTN'); 
+
+            paperInput.max = 100;
+            inkInput.max = 100;
+            inkInput.value = printerDataObject.current_ink;
+            paperInput.value = printerDataObject.current_paper;
+            on_off.textContent = printerDataObject.on ? "OFF" : "ON";
+
+            printsInput.disabled = !printerDataObject.on;
+            replenish_cartdrige.disabled = !printerDataObject.on;
+            replenish_paper.disabled = !printerDataObject.on;
+
+
+        }
+
+        function initGUI(printerObject)
+        {
+            let on_off = document.getElementById('on/offBTN');
+            let print = document.getElementById('printBTN');
+            let replenish_cartdrige = document.getElementById('cartridgeBTN'); 
+            let replenish_paper = document.getElementById('paperBTN'); 
+            
+            print.disabled = true;
+            replenish_paper.disabled = true;
+            replenish_cartdrige.disabled = true;
+
+                    on_off.onclick = () =>
+                    {
+                        let newPowerState = !printerObject.on;
+                        let on_sensor = document.getElementById("on_sensor");
+                        printerObject.on_off(newPowerState);
+
+                        updateGUI(getObjectProperties(printerObject))
+                        updateSensors(printerObject);
+                    }
+           
+                    replenish_cartdrige.onclick = () =>
+                    {
+                        printerObject.replace_cartdrige();
+
+                        updateGUI(getObjectProperties(printerObject));
+                        updateSensors(printerObject);
+                    }
+
+                    replenish_paper.onclick = () =>
+                    {
+                        let paper_sheets = Number(prompt('Cuantas hojas reponer: '))
+
+                        if (isNaN(paper_sheets) || paper_sheets <= 0 || paper_sheets + printerObject.paper_amount > 100)
+                        {
+                        alert('Por favor ingresar un numero valido de hojas');
+                        return;
+                        }
+
+                        let total_sheets = paper_sheets + printerObject.paper_amount;
+                        let paper_sensor = document.getElementById("paper_sensor");
+                        printerObject.replenish_paper(total_sheets);
+
+                        updateGUI(getObjectProperties(printerObject));
+                        updateSensors(printerObject);
+                    }
+                
+                    print.onclick = () => 
+                    {
+                        let print_number = Number(prompt('Ingrese el número de copias: '));
+
+                        if (isNaN(print_number) || print_number <= 0) {
+                            alert("Ingrese un número válido de copias.");
+                            return;
+                        }
+
+                        let available_paper = printerObject.paper_amount;
+
+                        if (print_number > available_paper) {
+                            let pending_prints = print_number - available_paper;
+                            let confirmation = confirm(`Faltan ${pending_prints} hojas. ¿Desea reponerlas y continuar la impresión?`);
+
+                            if (confirmation) {
+                                printerObject.print(available_paper); 
+                                printerObject.replenish_paper(pending_prints); 
+                                printerObject.print(pending_prints); 
+                                
+                                if(Number(pending_prints) && Number(pending_prints) > 100 )
+                                {       
+                                    alert('Demasiadas copias solicitadas. Operación cancelada.'); 
+                                    return;
+                                }
+
+                                updateGUI(getObjectProperties(printerObject));
+                                updateSensors(printerObject);
+                            } else {
+                                alert('Demasiadas copias solicitadas. Operación cancelada.');
+                                return;
+                            }
+                        } else {
+                            printerObject.print(print_number);
+
+                            updateGUI(getObjectProperties(printerObject));
+                            updateSensors(printerObject);
+                        }
+                    }
+
+        }
+
+        class Printer
+        {
+            constructor()
+            {
+                this._ink_volume = 0.0,
+                this._paper_sheets = 0,
+                this._ink = false,
+                this._paper = false,
+                this._on = false
+            }
+
+            get ink_volume() { return this._ink_volume; }
+            get ink() { return this._ink; }
+            get paper() { return this._paper; }
+            get paper_amount() { return this._paper_sheets; }
+            get on() { return this._on; }
+
+            set ink(restore) 
+            {
+                if (restore == true)
+                {
+                    this._ink = true;
+                    this._ink_volume = 100;
+                }
+                else
+                {
+                    console.log('Cannot switch cartridge.')
+                }    
+            }
+
+            set paper(paper)
+            {
+                if ( Number.isInteger(Number(paper)))
+                {
+                    this._paper = true;
+                    this._paper_sheets = paper;
+                }
+                else
+                {
+                    console.log('That is not paper mate.')
+                }
+            }
+
+            set power_on(power)
+            {
+                this._on = power;
+            }
+
+            replace_cartdrige() 
+            {
+                this.ink = true;
+            }
+
+            on_off(power) 
+            {
+                this.power_on = power; 
+            }
+            
+            replenish_paper(paper_amount)
+            {
+                this._paper_sheets = paper_amount;
+            }
+
+            print(copy_amount)
+            {
+                let ink_requirement = 0.2 * copy_amount;
+                let paper_requirement = copy_amount
+                if ( ink_requirement > this._ink_volume || paper_requirement > this._paper_sheets )
+                {
+                    alert ("Insumos insuficientes" );
+                }
+                else
+                {
+                    this._ink_volume -= ink_requirement;
+                    this._paper_sheets -= paper_requirement;
+                }
+            }
+        }
+
+function main()
+{
+    let printerObject = new Printer();
+    initGUI(printerObject);
+    updateGUI(getObjectProperties(printerObject));
+}
+
+window.onload = main;
+</script>
+</html>

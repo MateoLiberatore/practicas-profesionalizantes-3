@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html>
+    <head >
+        <style>
+            
+            table {border: solid black; height: 400px; width: 300px;}
+            p { width: 72px; }
+
+        </style>
+    </head>
+    <body>
+        
+        <table>
+            <tr>
+                <td><h2>Impresora</h2></td>
+            </tr>
+            <tr>
+                <td><p>Marca:</p></td>
+                <td><p id="brand"></p></td> 
+                <td><p>Modelo:</p></td>
+                <td><p id="model"></p></td>
+            </tr>
+                <td><p>Precio:</p></td>
+                <td><p id="price"></p></td>
+            <tr>
+                <td><p>Voltage:</p></td>
+                <td><p id="voltage"></p></td>
+                <td><p>Type:</p></td>
+                <td><p id="type"></p></td>
+            </tr>    
+            <tr>
+                <td><p>Bluethoot:</p></td>
+                <td><p id="bluethoot"></p></td>
+                <td><p>Wifi:</p></td>
+                <td><p id="wifi"></p></td>
+            </tr>   
+            <tr>
+                <td><p>Paper:</p></td>
+                <td><p id="papel"></p></td>
+                <td><p>Scanner:</p></td>
+                <td><p id="scanner"></p></td>
+            </tr> 
+        </table>
+
+    </body>
+    <script>
+        class Printer 
+        {
+            constructor() 
+            {
+                this._brand = "";
+                this._model = "";
+                this._price = "";
+                this._voltage = "";
+                this._type = "";
+                this._bluethoot = "";
+                this._wifi = "";   
+                this._paper = "";
+                this._scanner = ""; 
+            }
+            get brand() { return this._brand; }
+            set brand_(value) { this._brand = value; }
+
+            get model() { return this._model; }
+            set model_(value) { this._model = value; }
+
+            get price() { return this._price; }
+            set price_(value) { this._price = value; }
+
+            get voltage() { return this._voltage; }
+            set voltage_(value) { this._voltage = value; }
+
+            get type() { return this._type; }
+            set type_(value) { this._type = value; }
+
+            get bluethoot() { return this._bluethoot; }
+            set bluethoot_(value) { this._bluethoot = value; }
+
+            get wifi() { return this._wifi; }
+            set wifi_(value) { this._wifi = value; }
+
+            get paper() { return this._paper; }
+            set paper_(value) { this._paper = value; }
+
+            get scanner() { return this._scanner; }
+            set scanner_(value) { this._scanner = value; } 
+}
+
+function loadOnGUI(printerObject)
+{
+    let form_data = 
+    {
+        brand : document.getElementById('brand'),
+        model : document.getElementById('model'),
+        price : document.getElementById('price'),
+        voltage : document.getElementById('voltage'),
+        type : document.getElementById('type'),
+        bluethoot : document.getElementById('bluethoot'),
+        wifi : document.getElementById('wifi'),
+        paper : document.getElementById('papel'),
+        scanner : document.getElementById('scanner')  
+    }
+
+    form_data.brand.textContent = printerObject.brand; // aca se usa el get
+    form_data.model.textContent = printerObject.model;
+     
+
+}        
+        function main()
+        {
+            let printerObject = new Printer();
+            printerObject.brand_ = "HP"; // aca se le pasa el parametro al set
+            printerObject.model_ = "Viper";
+
+            loadOnGUI(printerObject);
+        }
+
+        window.onload = main;
+    </script>
+</html>

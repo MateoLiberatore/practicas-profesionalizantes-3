@@ -7,51 +7,130 @@
 
 </head>
 
-<style type="text/css">
-
-.luzroja
+<style>    
+body
+{	
+	display: flex;
+    margin: 0;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+#container 
 {
-	background-color: red;
-	color:white;
+	display: flex;
+    flex-direction: inherit;
+    justify-content: inherit;
+    align-items: inherit;
+    gap: 20px;
+    width: max-content;
+    height: max-content;
+    padding: 50px;
+    border-radius: 15px;
+    margin-top:50px;
+    background-color: #ABB2BA;
+	box-shadow: inset 0px 0px 50px rgba(0, 0, 0, 0.5);
+	border: 0px solid transparent;
 }
 
-.luzamarilla
+.semaforo 
 {
-	background-color: yellow;
-	color:black;
+	background-color: grey;
+	height: 520px;
+	width: 300px;
+	border-radius: 50px;
+	box-shadow: inset 0px 0px 50px rgba(0, 0, 0, 1);
 }
 
-.luzverde
+.semaforo td 
+{
+  text-align: center;
+}
+
+.semaforo span 
+{
+	height: 135px;
+	width: 135px;
+	display: inline-block;
+	border-radius: 100%;
+}
+
+canvas 
+{
+	display: block;
+    border: 1px solid transparent;
+    border-radius: 50px;
+    background-color: #d5d8dc;
+    box-shadow: inset 0 0 25px 10px rgba(128, 128, 128, 0.5);
+    outline: none;
+}
+
+/* Luces del semáforo apagadas (oscuras) */
+#green 
 {
 	background-color: green;
-	color:white;
+	box-shadow: inset 0px 0px 25px rgba(0, 0, 0, 0.76);
 }
 
-.luzapagada
+#red {
+  background-color: red;
+  box-shadow: inset 0px 0px 25px rgba(0, 0, 0, 0.76);
+}
+
+#yellow 
 {
-	background-color: white;
-	color:black;
+	background-color: yellow;
+	box-shadow: inset 0px 0px 25px rgba(0, 0, 0, 0.76);
 }
 
+button 
+{
+	width: 150px;
+	height: 50px;
+	margin: 5px;
+	padding: 10px 20px;
+	font-size: 16px;
+	border-radius: 5px;
+	border: 0px solid transparent;	
+	font-family:Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+}
+#on:hover
+{
+	background-color: #16a085;
+	box-shadow: none;
+}
 
+#off:hover
+{
+	background-color: #cb4335;
+	box-shadow : none;
+}
 </style>
 
 <body>
+<div id="container">
 
-<button id="red">LuzRoja</button>
-<button id="yellow">LuzAmarilla</button>
-<button id="green">LuzVerde</button>
+	<table class="semaforo">
+		<tr><td><span id="red">&nbsp;</span></td></tr>
+		<tr><td><span id="yellow">&nbsp;</span></td></tr>
+		<tr><td><span id="green">&nbsp;</span></td></tr>
+	</table>
 
-<button id="on">Encender</button>
-<button id="off">Apagar</button>
+	<canvas id="canvas" width="600" height="100"></canvas>
 
+	<div> <!-- para que queden en linea los botones-->
+		<button id="on">Encender</button>
+		<button id="off">Apagar</button>	
+	</div>
+	
+
+</div>
 </body>
 
 <script type="text/javascript">
 	
 /*Semáforo (prioridad): Desarrolle el modelo del objeto conceptual y su representación 
-gráfica correspondiente (HTML/CSS/JS)*/
-
+gráfica correspondiente (HTML/CSS/JS)*/ 
 class SemaphoreView
 {
 	constructor( model )
@@ -68,25 +147,37 @@ class SemaphoreView
 	{
 		let state = this._model.getModelState();
 
-		document.getElementById('red').style.backgroundColor = 'white';
-		document.getElementById('yellow').style.backgroundColor = 'white';
-		document.getElementById('green').style.backgroundColor = 'white';
+		document.getElementById('red').style.backgroundColor = "#4a0101";
+		document.getElementById('yellow').style.backgroundColor = "#6d5e00";
+		document.getElementById('green').style.backgroundColor = "#1d3f00";
 
-		if ( state.red )
+		if (state.red && !state.yellow && !state.green) 
 		{
-			document.getElementById('red').style.backgroundColor = 'red';
+			document.getElementById('red').style.backgroundColor = "#ff1f1f";
+			animationSpeed = 0;
+		} 
+		else if (state.red && state.yellow && !state.green) 
+		{
+			
+			document.getElementById('red').style.backgroundColor = "#ff1f1f";
+			document.getElementById('yellow').style.backgroundColor = 'yellow';
+			animationSpeed = 1;// rojo + amarillo, speed=1;
 		}
-
-		if ( state.yellow )
+		else if (!state.red && !state.yellow && state.green) 
+		{
+			document.getElementById('green').style.backgroundColor = "#75ff00";
+			animationSpeed = 5;
+		}
+		else if (!state.red && state.yellow && state.green) 
 		{
 			document.getElementById('yellow').style.backgroundColor = 'yellow';
+			document.getElementById('green').style.backgroundColor = "#75ff00";
+			animationSpeed = 1;  // verde + amarillo, speed=1;
 		}
-
-		if ( state.green )
-		{
-			document.getElementById('green').style.backgroundColor = 'green';
+		else {
+			animationSpeed = 0;
+			// apagado
 		}
-
 	}
 }
 
@@ -203,7 +294,7 @@ class SemaphoreModel extends EventTarget
 	{
 		if ( !this.isRunning )
 		{
-			this.worker = new Worker("timer.js");
+			this.worker = new Worker("timer_worker.js");
 			this.worker.addEventListener('message', this.onTickEventHandler.bind(this) );
 			this.isRunning = true;
 		}
@@ -226,13 +317,98 @@ class SemaphoreModel extends EventTarget
 	}
 }
 
+const canvas = document.getElementById('canvas');
+const context = canvas.getContext('2d');
+
+let x = 50;
+let y = canvas.height / 2;
+let radius = 30;
+
+let animationSpeed = 0; // velocidad de pelota
+let direction = 1; // sentido del movimiento
+
+let animationActive = false;
+let animationFrameId = null;
+
+
+function draw()
+{	
+	context.clearRect(0, 0, canvas.width, canvas.height);
+	
+	//estetica de la pelota (sombras)
+	context.shadowColor = 'rgba(0, 0, 0, 1.5)';
+	context.shadowBlur = 20;
+	context.shadowOffsetX = 0; 
+    context.shadowOffsetY = 0;
+
+	// dibujo de la pelota
+    context.beginPath();
+    context.arc(x, y, radius, 0, Math.PI * 2);
+    context.fillStyle = "#273746";
+    context.fill();
+    context.closePath();
+
+	context.shadowColor = 'transparent';
+}
+
+function animate() {
+    
+	if (!animationActive) return;
+
+	draw();
+
+    x += animationSpeed * direction;
+
+    if (x + radius > canvas.width) {
+        direction = -1; // colisión cambiar dirección
+    }
+    if (x - radius < 0) {
+        direction = 1; // colisión cambiar dirección
+    }
+
+    animationFrameId = requestAnimationFrame(animate);
+}
+
+
+function startAnimation() 
+{
+    if (!animationActive) 
+	{
+        animationActive = true;
+        animate();
+    }
+}
+
+function stopAnimation() 
+{
+    animationActive = false;
+
+    if (animationFrameId) 
+	{
+        cancelAnimationFrame(animationFrameId);
+        animationFrameId = null;
+    }
+}
+
 function main()
 {
 	let semaphore = new SemaphoreModel();
 	let view = new SemaphoreView(semaphore);
 
-	document.getElementById('on').onclick = () => semaphore.run();
-	document.getElementById('off').onclick = () => semaphore.shutdown();
+	draw();
+
+	document.getElementById('on').onclick = () => 
+	{
+		semaphore.run(); 
+		startAnimation();
+	};
+
+	document.getElementById('off').onclick = () => 
+	{
+		semaphore.shutdown(); 
+		stopAnimation();
+	};
+	
 }
 
 window.onload = main;

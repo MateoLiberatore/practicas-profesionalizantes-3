@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <title>Yo Robot</title>
+        <style>
+
+            canvas 
+            { 
+                border: 5px solid black;
+                display: block;
+                border-radius: 15px;
+                width: 1200px;
+                height: 800px;
+                position: absolute;     /* Posicionamiento absoluto */
+                top: 55%;               /* Centrar verticalmente (aproximado) */
+                left: 50%;              /* Centrar horizontalmente (aproximado) */
+                transform: translate(-50%, -50%); /* Centrado perfecto */
+                background-color: white;
+                z-index: 1;             /* Asegura que el canvas esté en la capa base */
+            }
+
+            body 
+            {
+                min-height: 100vh;      /* Asegura que el cuerpo ocupe toda la altura de la ventana */
+                margin: 0;
+                background-color: grey;
+            }
+
+            #spawn_button 
+            {
+                background-color: #3294f2;
+                color: white;
+                font-size: 20px;
+                font-weight: bold;
+                width: 250px;
+                height: 75px;
+                padding-left: 35px;
+                border: none;
+                border-radius: 8px;
+                box-shadow: 
+                    0 6px 2px #1b5a97,      /* sombra abajo */
+                    6px 2px 2px #1b5a97,    /* sombra derecha */
+                    6px 6px 0 #1b5a97;      /* esquina inferior derecha */
+                position: absolute;
+                top: 20vh;
+                left: 5vh;
+                cursor: pointer;
+                z-index: 2;
+                text-align: left;
+                transition: transform 0.5s ;
+            }
+            #spawn_button:active 
+            {
+                transform: translate(4px, 4px);
+                box-shadow: 
+                    0 4px 0 #1b5a97,
+                    4px 0 0 #1b5a97,
+                    4px 4px 0 #1b5a97;
+            }
+        </style>
+    </head>
+    <body>
+        
+    </body>
+    <script type="module" src="./main.js"></script>
+</html>

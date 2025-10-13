@@ -1,0 +1,12 @@
+# Dockerfile
+FROM python:3.9-slim
+
+WORKDIR /usr/src/app
+
+COPY poetry.lock pyproject.toml ./
+RUN pip install poetry
+RUN poetry install --no-dev
+
+COPY . .
+
+CMD ["poetry", "run", "python", "src/app.py"]

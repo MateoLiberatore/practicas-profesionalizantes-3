@@ -1,0 +1,40 @@
+@import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
+@import "tailwindcss";
+
+@theme {
+    --color-primary-100: #f0f9ff;
+    --color-primary-200: #e0f2fe; 
+    --color-primary-300: #bae6fd; 
+    --color-primary-400: #7dd3fc; 
+    --color-primary-500: #38bdf8; 
+    --color-primary-600: #0ea5e9;
+    --color-primary-700: #0284c7;
+    --color-primary-800: #0369a1;
+    --color-primary-900: #075985;
+  
+    --color-secondary-100: #f8fafc;
+    --color-secondary-200: #f1f5f9; 
+    --color-secondary-300: #e2e8f0; 
+    --color-secondary-400: #cbd5e1; 
+    --color-secondary-500: #94a3b8; 
+    --color-secondary-600: #64748b;
+    --color-secondary-700: #475569;
+    --color-secondary-800: #334155;
+    --color-secondary-900: #1e293b;
+
+    --color-terciary-100: #fff7ed;
+    --color-terciary-200: #ffedd5; 
+    --color-terciary-300: #fed7aa; 
+    --color-terciary-400: #fdba74; 
+    --color-terciary-500: #fb923c; 
+    --color-terciary-600: #f97316;
+    --color-terciary-700: #ea580c;
+    --color-terciary-800: #dc2626;
+    --color-terciary-900: #b91c1c;
+    
+
+    --color-text-light: oklch(98.5% 0 0); /* Blanco o muy claro (para fondo oscuro) */
+    --color-text-dark: oklch(14.5% 0 0); /* Oscuro o casi negro (para fondo claro) */
+}
+
+

@@ -1,22 +1,23 @@
 import React from "react";
-import PromptingContainer from "../features/prompt/ClassBuilder" 
-import { useAuth } from '../hooks/useAuth';
-import { Navigate } from 'react-router-dom'; 
-import ClassBuilder from "../features/prompt/ClassBuilder";
+import { useAuth } from "../hooks/useAuth";
+import { Navigate } from "react-router-dom";
+import { GeneratorProvider } from "../context/GeneratorContext";
+import ClassBuilder from "../features/generator/ClassBuilder";
 
 function GenerationPage() {
-    // Asumimos que useAuth devuelve 'user' (o 'isAuthenticated')
-    const { user } = useAuth(); 
-    if (!user) { 
-        // Redirigir a la ruta de inicio/login
-        return <Navigate to="/" replace />; 
+    const { user } = useAuth();
+
+    if (!user) {
+        return <Navigate to="/" replace />;
     }
 
     return (
-        <div className="generation-page-wrapper">
-            <ClassBuilder/>
-        </div>
-    )
+        <GeneratorProvider>
+            <div className="generation-page-wrapper">
+                <ClassBuilder />
+            </div>
+        </GeneratorProvider>
+    );
 }
 
 export default GenerationPage;

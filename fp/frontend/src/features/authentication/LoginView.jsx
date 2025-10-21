@@ -15,15 +15,15 @@ function LandingView({ LoginComponent }) {
         p-8 
         ml-16
         rounded-md  
-        shadow-[0_0px_70px_rgba(0,0,0,0.3)]
+        shadow-[0_0px_50px_rgba(0,0,0,0.3)]
         shadow-primary-500 
         flex flex-col 
         gap-6 
         ">
         
         <header className="text-center">
-            <h1 className="text-6xl font-bold  text-primary-400"> 
-                PreCode
+            <h1 className="text-6xl font-bold  text-primary-300"> 
+                &gt;PreCode
             </h1>
         </header>
 

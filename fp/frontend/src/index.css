@@ -1,40 +1,218 @@
-@import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
 @import "tailwindcss";
 
+
+body {
+ 
+  @apply overflow-y-scroll; 
+}
 @theme {
-    --color-primary-100: #f0f9ff;
-    --color-primary-200: #e0f2fe; 
-    --color-primary-300: #bae6fd; 
-    --color-primary-400: #7dd3fc; 
-    --color-primary-500: #38bdf8; 
-    --color-primary-600: #0ea5e9;
-    --color-primary-700: #0284c7;
-    --color-primary-800: #0369a1;
-    --color-primary-900: #075985;
+
+  --color-primary-100: #f0f9ff;
+  --color-primary-200: #e0f2fe; 
+  --color-primary-300: #bae6fd; 
+  --color-primary-400: #7dd3fc; 
+  --color-primary-500: #38bdf8; 
+  --color-primary-600: #0ea5e9;
+  --color-primary-700: #0284c7;
+  --color-primary-800: #0369a1;
+  --color-primary-900: #075985;
+ 
+  --color-secondary-100: #f8fafc;
+  --color-secondary-200: #f1f5f9; 
+  --color-secondary-300: #e2e8f0; 
+  --color-secondary-400: #cbd5e1; 
+  --color-secondary-500: #94a3b8; 
+  --color-secondary-600: #64748b;
+  --color-secondary-700: #475569;
+  --color-secondary-800: #334155;
+  --color-secondary-900: #1e293b;
+
+  --color-terciary-100: #fff7ed;
+  --color-terciary-200: #ffedd5; 
+  --color-terciary-300: #fed7aa; 
+  --color-terciary-400: #fdba74; 
+  --color-terciary-500: #fb923c; 
+  --color-terciary-600: #f97316;
+  --color-terciary-700: #ea580c;
+  --color-terciary-800: #dc2626;
+  --color-terciary-900: #b91c1c;
   
-    --color-secondary-100: #f8fafc;
-    --color-secondary-200: #f1f5f9; 
-    --color-secondary-300: #e2e8f0; 
-    --color-secondary-400: #cbd5e1; 
-    --color-secondary-500: #94a3b8; 
-    --color-secondary-600: #64748b;
-    --color-secondary-700: #475569;
-    --color-secondary-800: #334155;
-    --color-secondary-900: #1e293b;
 
-    --color-terciary-100: #fff7ed;
-    --color-terciary-200: #ffedd5; 
-    --color-terciary-300: #fed7aa; 
-    --color-terciary-400: #fdba74; 
-    --color-terciary-500: #fb923c; 
-    --color-terciary-600: #f97316;
-    --color-terciary-700: #ea580c;
-    --color-terciary-800: #dc2626;
-    --color-terciary-900: #b91c1c;
-    
+  --color-text-light: oklch(98.5% 0 0);
+  --color-text-dark: oklch(14.5% 0 0);
+}
 
-    --color-text-light: oklch(98.5% 0 0); /* Blanco o muy claro (para fondo oscuro) */
-    --color-text-dark: oklch(14.5% 0 0); /* Oscuro o casi negro (para fondo claro) */
+@utility collapsible-section {
+    @apply rounded-2xl p-0.5 mb-4
+    shadow-[0_0px_30px_rgba(0,0,0,0.1)]
+    shadow-secondary-800;
+}
+
+@utility collapsible-section-content {
+    @apply 
+    max-h-[5000px] 
+    transition-[max-height,opacity] 
+    duration-500 
+    ease-in-out 
+    overflow-hidden; 
 }
 
 
+@utility class-headers {
+  @apply bg-secondary-400 
+  rounded-2xl 
+  p-6  
+  text-secondary-800
+  w-full
+
+  grid
+  grid-cols-1
+  md:grid-cols-2 
+  gap-4
+  }
+@utility header-delete-button {
+  @apply grid place-items-center
+  bg-terciary-500
+  rounded-sm 
+  ml-2.5 
+  text-secondary-900 
+  font-bold 
+  text-sm 
+  w-35 h-7 
+  mt-0.5
+  hover:bg-terciary-800
+  hover:text-white
+  transition
+  duration-400
+}
+@utility header-span-list {
+  @apply 
+  bg-secondary-800 
+  text-terciary-500 
+  font-medium 
+  text-lg 
+  p-1 
+  mb-1
+  w-full
+  rounded-md
+}
+
+@utility header-add-button {
+  @apply grid place-items-center
+  bg-primary-500 
+  rounded-sm
+  ml-2.5 
+  text-secondary-900 
+  font-bold 
+  text-sm 
+  w-50 h-10 
+
+  hover:bg-primary-900
+  hover:text-white
+  transition
+  duration-400
+}
+  
+@utility hide-show {
+  @apply 
+  mt-3 ml-2 mb-3
+  p-1 w-25 
+  text-secondary-800 
+  bg-secondary-300 font-bold 
+  text-lg 
+  rounded-md
+  shadow-[0_0px_20px_rgba(0,0,0,0.1)]
+  inline-block;
+}
+
+@utility class-constructor{
+  @apply bg-secondary-400
+  rounded-2xl 
+  p-6 
+  text-secondary-800
+  w-full
+
+  grid
+  grid-cols-1
+  md:grid-cols-2 
+  gap-4 
+}
+
+@utility class-methods {
+  @apply
+  bg-secondary-400 
+  rounded-2xl 
+  p-6 
+  pb-24
+  text-secondary-800
+  w-full
+  space-y-4
+}
+
+@utility method-section-style {
+  @apply 
+  space-y-3 
+  p-4 rounded-2xl 
+  bg-secondary-300 
+  border-0 
+  shadow-[0_0px_30px_rgba(0,0,0,0.1)]
+  shadow-secondary-600
+
+}
+
+@utility form-field-container {
+  @apply 
+  space-y-3
+}
+
+@utility form-add-row {
+  @apply
+  mt-5
+  flex 
+  gap-2 
+  items-baseline
+  w-full
+}
+
+
+@utility input-container {
+  @apply 
+  flex 
+  gap-2 
+  items-baseline
+  bg-secondary-800
+  font-medium
+  p-4 rounded-md 
+  w-full
+} 
+
+@utility input-style {
+  @apply 
+  w-full 
+  h-full 
+  focus:outline-none 
+  bg-transparent
+}
+
+@utility label-style {
+  @apply
+  font-bold 
+  text-2xl 
+  w-fit p-1 
+  
+}
+
+@utility h3-style {
+  @apply
+  font-bold 
+  text-4xl 
+  pt-4 
+  w-fit p-3 
+  rounded-3xl
+  mt-25
+  mb-4
+}
+
+.cs-content.collapsed {
+    @apply max-h-0 opacity-0 p-0;
+}

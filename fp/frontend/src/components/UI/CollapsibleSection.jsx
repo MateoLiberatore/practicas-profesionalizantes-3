@@ -1,33 +1,37 @@
 import React, { useState } from 'react';
 import Button from './Button';
 
-/**
- * @component CollapsibleSection
- * @description Contenedor colapsable determinista.
- */
 function CollapsibleSection(props) {
-    var state = useState(true);
-    var isOpen = state[0];
-    var setIsOpen = state[1];
+    const [isOpen, setIsOpen] = useState(true);
 
     function handleToggle() {
         setIsOpen(!isOpen);
+        if (props.onChange) {
+            props.onChange(!isOpen);
+        }
     }
 
-    return (
-        <section className="collapsible-section">
-            <header className="cs-header">
-                <h3>{props.title}</h3>
-            </header>
+    const contentClasses = `cs-content collapsible-section-content ${!isOpen ? 'collapsed' : ''}`;
 
-            {isOpen && <div className="cs-content">{props.children}</div>}
+    return (
+        <section className="collapsible-section" {...props}>
+            {props.title && (
+                <header className="cs-header">
+                    <h3>{props.title}</h3>
+                </header>
+            )}
+
+            <div className={contentClasses}>
+                {props.children}
+            </div>
 
             <div className="cs-toggle">
-                <Button type="secondary" onClick={handleToggle} className={props.buttonClassName}>
+                <Button type="secondary" onClick={handleToggle} className="hide-show">
                     {isOpen ? 'Ocultar' : 'Mostrar'}
                 </Button>
             </div>
         </section>
+        
     );
 }
 

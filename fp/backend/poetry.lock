@@ -186,6 +186,20 @@ files = [
 ]
 
 [[package]]
+name = "dotenv"
+version = "0.9.9"
+description = "Deprecated package"
+optional = false
+python-versions = "*"
+groups = ["main"]
+files = [
+    {file = "dotenv-0.9.9-py2.py3-none-any.whl", hash = "sha256:29cf74a087b31dafdb5a446b6d7e11cbce8ed2741540e2339c69fbef92c94ce9"},
+]
+
+[package.dependencies]
+python-dotenv = "*"
+
+[[package]]
 name = "flask"
 version = "3.1.2"
 description = "A simple framework for building complex web applications."
@@ -894,4 +908,4 @@ watchdog = ["watchdog (>=2.3)"]
 [metadata]
 lock-version = "2.1"
 python-versions = "^3.12.1"
-content-hash = "56236ebb41a7f89777edeca8fd351129acf294988aaddcb6f53229914d58321d"
+content-hash = "5ef991330bcd3cc1324d9e56c998b4cb02c4f35394c93ca1b1a750ea7ec3eb69"

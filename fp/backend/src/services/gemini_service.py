@@ -1,110 +1,98 @@
-import os
-from dotenv import load_dotenv
 from google import genai
-from src.configs.gemini_config import get_gemini_client
+from src.configs.gemini_config import (
+    get_gemini_client,
+    MODEL_NAME,
+    SYSTEM_INSTRUCTION_CODE_GENERATOR
+)
 from src.utils.error_handler import APIError
+from src.models.gemini_model import GeminiRequestModel 
 
-load_dotenv() 
+def _generate_code_prompt(data: dict) -> tuple[str, str]:
 
-TEST_MODE = os.environ.get("GEMINI_TEST_MODE", "False").lower() == 'true'
+    language = data['target_language'] 
+    user_instructions = data['user_instructions'] 
+    
+    context_headers = data.get('context_headers', {})
+    style_config = data.get('style_config', {})
 
-class MockResponse:
-    def __init__(self, text):
-        self.text = text
+    system_instruction = SYSTEM_INSTRUCTION_CODE_GENERATOR.format(language=language)
+    
+    if context_headers:
+        system_instruction += "\n\nRESTRICCIONES ESTRUCTURALES:"
+        for key, value in context_headers.items():
+            system_instruction += f"\n- {key.upper()}: {value}"
+            
+    if style_config:
+        system_instruction += "\n\nCONFIGURACIÓN DE ESTILO:"
+        for key, value in style_config.items():
+            system_instruction += f"\n- Estilo Requerido ({key.upper()}): {value}"
 
-def mock_generate_content(*args, **kwargs):
-    user_prompt = kwargs.get('contents')
-    if isinstance(user_prompt, list):
-        user_prompt = user_prompt[0]
-
-    mock_code = (
-        f"# Código simulado en modo de prueba\n"
-        f"def simulated_function():\n"
-        f"    # El prompt fue: {user_prompt[:50]}...\n"
-        f"    return 'Hello, Gemini Test World!'"
+    user_prompt = (
+        f"Usando el lenguaje {language}, genera el código que cumple con las siguientes instrucciones: \n\n"
+        f"Instrucciones del usuario: {user_instructions}"
     )
-    return MockResponse(mock_code)
 
-class MockClient:
-    def __init__(self):
-        self.models = self
+    return system_instruction, user_prompt
 
-    def generate_content(self, *args, **kwargs):
-        return mock_generate_content(*args, **kwargs)
-
-def get_mock_client():
-    return MockClient()
-
-
-class GeminiService:
-    def __init__(self):
-        if TEST_MODE:
-            self.client = get_mock_client()
-        else:
-            self.client = get_gemini_client()
-
-        self.model_name = "gemini-2.5-flash" 
-
-    def _generate_code_prompt(self, data):
-        language = data['language']
-        template_instructions = data['template']
-        
-        system_instruction = (
-            f"Eres un generador de código experto y eficiente. Tu única respuesta debe ser el bloque de código "
-            f"completo en el lenguaje {language}. No añadas explicaciones, texto introductorio, ni texto de conclusión."
-        )
-
-        user_prompt = (
-            f"Usando el lenguaje {language}, genera el código que cumple con las siguientes instrucciones: "
-            f"\n\nInstrucciones del usuario: {template_instructions}"
-        )
-
-        return system_instruction, user_prompt
-
-    def _clean_generated_code(self, raw_code):
-        lines = raw_code.strip().splitlines()
-        
-        if lines and lines[0].strip().startswith("```"):
+def _clean_generated_code(raw_code: str) -> str:
+    
+    if raw_code.startswith('```'):
+        lines = raw_code.strip().split('\n')
+        if len(lines) > 1 and lines[0].strip().startswith('```'):
             lines = lines[1:]
+        if lines[-1].strip() == '```':
+            lines = lines[:-1]
         
-        if lines and lines[-1].strip() == "```":
-            lines.pop()
-            
-        return "\n".join(lines).strip()
-
-    def _handle_code_generation(self, data):
-        system_instruction, user_prompt = self._generate_code_prompt(data)
-        
-        try:
-            response = self.client.models.generate_content(
-                model=self.model_name,
-                contents=user_prompt,
-                config=genai.types.GenerateContentConfig(
-                    system_instruction=system_instruction
-                )
-            )
-            
-            raw_code = response.text
-            
-            if not raw_code.strip():
-                raise APIError("Gemini no pudo generar código para las instrucciones proporcionadas.", status_code=500)
-            
-            clean_code = self._clean_generated_code(raw_code)
-                
-            return {"code": clean_code}
-            
-        except genai.errors.APIError as e:
-            print(f"Error de la API de Gemini: {e}")
-            raise APIError("Error en el servicio de IA. Verifica tu API Key o los límites de uso.", status_code=500)
-            
-        except Exception as e:
-            print(f"Error inesperado durante la generación de código: {e}")
-            raise APIError("Ocurrió un error inesperado al procesar la solicitud de IA.", status_code=500)
+        cleaned_code = '\n'.join(lines)
+        return cleaned_code.strip()
+    
+    return raw_code.strip()
 
 
-    def process_task(self, task_type, data):
-        
-        if task_type == "code_generation":
-            return self._handle_code_generation(data)
-        
-        raise APIError(f"Tarea {task_type} no implementada en el servicio.", status_code=500)
+def _call_gemini_api(system_instruction: str, user_prompt: str):
+
+    client = get_gemini_client() 
+    
+    response = client.models.generate_content(
+        model=MODEL_NAME,
+        contents=user_prompt,
+        config=genai.types.GenerateContentConfig(
+            system_instruction=system_instruction
+        )
+    )
+    return response
+
+
+def handle_code_generation(data: dict) -> dict:
+
+    system_instruction, user_prompt = _generate_code_prompt(data)
+
+    try:
+        response = _call_gemini_api(system_instruction, user_prompt)
+    except genai.errors.APIError as e:
+        status_code = 500
+        if hasattr(e, 'response_json') and e.response_json and 'error' in e.response_json and 'code' in e.response_json['error']:
+            status_code = e.response_json['error']['code']
+        raise APIError(f"Error en la API de Gemini. Mensaje original: {e}", status_code=status_code)
+    except Exception as e:
+        raise APIError(f"Error inesperado al comunicarse con Gemini: {e}", status_code=500)
+    
+    raw_code = response.text
+
+    if not raw_code.strip():
+        raise APIError("Gemini no pudo generar código para las instrucciones proporcionadas.", status_code=500)
+
+    clean_code = _clean_generated_code(raw_code)
+
+    return {"code": clean_code}
+
+
+def process_gemini_task(payload: dict):
+    
+    task_type = payload.get('task_type')
+    data = payload.get('data')
+
+    if task_type == 'code_generation':
+        return handle_code_generation(data)
+
+    raise APIError("Tipo de tarea de Gemini no soportado.", status_code=400)

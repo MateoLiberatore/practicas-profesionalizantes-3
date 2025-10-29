@@ -1,7 +1,7 @@
 from src.models.user_model import UserModel
 from werkzeug.security import generate_password_hash, check_password_hash
 from src.utils.error_handler import APIError
-from flask_login import login_user
+from src.utils.auth_utils import create_jwt_token
 
 user_model = UserModel()
 
@@ -19,13 +19,17 @@ def register_user(data):
     return new_user
 
 def authenticate_user(email, password):
+    
     user_data = user_model.get_user_by_email(email)
 
     if user_data and check_password_hash(user_data['password'], password):
-        user_instance = user_model.get_user_by_id(user_data['id'])
-        login_user(user_instance)
+        
+        token = create_jwt_token(user_data['id'])
         
         user_data.pop('password', None)
-        return user_data
+        return {
+            "token": token,
+            "user": user_data
+        }
 
     raise APIError("Credenciales inválidas.", status_code=401)

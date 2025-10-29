@@ -62,3 +62,4 @@ def show_all_users():
     print("-" * (len(header_line) + 4))
 
     conn.close()
+

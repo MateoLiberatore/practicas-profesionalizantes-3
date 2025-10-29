@@ -1,8 +1,7 @@
 import sqlite3
 from src.utils.error_handler import APIError
-from flask_login import UserMixin
 
-class UserModel(UserMixin):
+class UserModel:
     
     def __init__(self, db_file="users.db"):
         self.db_file = db_file
@@ -22,7 +21,7 @@ class UserModel(UserMixin):
                 cursor = conn.cursor()
                 cursor.execute(
                     """
-                    INSERT INTO users (username, email, password) VALUES (?, ?, ?)
+                    INSERT INTO users (username, email, password) VALUES (?,?,?)
                     """,
                     (username, email, password)
                 )
@@ -44,7 +43,7 @@ class UserModel(UserMixin):
         try:
             with conn:
                 cursor = conn.cursor()
-                cursor.execute("SELECT * FROM users WHERE username = ?", (username,))
+                cursor.execute("SELECT * FROM users WHERE username =?", (username,))
                 user_data = cursor.fetchone()
                 return dict(user_data) if user_data else None
         finally:
@@ -55,7 +54,7 @@ class UserModel(UserMixin):
         try:
             with conn:
                 cursor = conn.cursor()
-                cursor.execute("SELECT * FROM users WHERE email = ?", (email,))
+                cursor.execute("SELECT * FROM users WHERE email =?", (email,))
                 user_data = cursor.fetchone()
                 return dict(user_data) if user_data else None
         finally:
@@ -67,17 +66,8 @@ class UserModel(UserMixin):
         conn.row_factory = sqlite3.Row
         try:
             with conn:
-                cursor = conn.execute("SELECT * FROM users WHERE id = ?", (user_id,))
+                cursor = conn.execute("SELECT * FROM users WHERE id =?", (user_id,))
                 user_data = cursor.fetchone()
-                if user_data:
-                    user_instance = UserModel()
-                    user_instance.id = user_data['id']
-                    user_instance.username = user_data['username']
-                    user_instance.email = user_data['email']
-                    user_instance.password = user_data['password']
-                    return user_instance
-                return None
+                return dict(user_data) if user_data else None 
         finally:
             conn.close()
-
-#UserModel.get_user_by_id(1)

@@ -32,7 +32,7 @@ function FormHeaders() {
   };
 
   return (
-    <CollapsibleSection  onChange={handleSync}>
+    <CollapsibleSection onChange={handleSync}>
       <div className="class-headers">
 
         <div className="col-span-full md:col-span-2 form-field-container">

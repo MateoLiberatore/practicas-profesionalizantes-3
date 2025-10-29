@@ -1,0 +1,111 @@
+import sys
+import os
+import pytest
+import sqlite3
+from unittest.mock import Mock
+from flask import Flask
+from werkzeug.security import generate_password_hash
+from dotenv import load_dotenv
+
+BASE_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", ".."))
+if BASE_DIR not in sys.path:
+    sys.path.insert(0, BASE_DIR)
+
+load_dotenv()
+
+from src.models.user_model import UserModel
+from src.services import auth_service
+from src.utils.error_handler import register_error_handlers, APIError
+
+
+@pytest.fixture(scope='session')
+def app():
+    app = Flask(__name__)
+    app.config['SECRET_KEY'] = 'clave_secreta_para_testing_jwt'
+    register_error_handlers(app)
+    with app.app_context():
+        yield app
+
+
+@pytest.fixture(scope='session')
+def client(app):
+    return app.test_client()
+
+
+@pytest.fixture(scope='function')
+def db_session():
+    conn = sqlite3.connect(':memory:')
+    conn.row_factory = sqlite3.Row
+    cursor = conn.cursor()
+
+    cursor.execute("""
+        CREATE TABLE IF NOT EXISTS users (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            username VARCHAR(255) UNIQUE NOT NULL,
+            email VARCHAR(255) UNIQUE NOT NULL,
+            password VARCHAR(255) NOT NULL
+        )
+    """)
+    conn.commit()
+
+    class MockUserModel(UserModel):
+        def connect(self):
+            return conn
+
+        def create_user(self, username, email, password):
+            try:
+                cursor.execute(
+                    """
+                    INSERT INTO users (username, email, password) VALUES (?,?,?)
+                    """,
+                    (username, email, password)
+                )
+                conn.commit()
+                user_id = cursor.lastrowid
+                return {
+                    "id": user_id,
+                    "username": username,
+                    "email": email
+                }
+            except sqlite3.IntegrityError:
+                raise APIError("El nombre de usuario o email ya existe.", status_code=409)
+            except sqlite3.Error as e:
+                raise APIError(f"Ocurrió un error al crear el usuario en el mock DB: {e}", status_code=500)
+
+        def get_user_by_email(self, email):
+            cursor.execute("SELECT * FROM users WHERE email=?", (email,))
+            row = cursor.fetchone()
+            return dict(row) if row else None
+
+        def get_user_by_name(self, username):
+            cursor.execute("SELECT * FROM users WHERE username=?", (username,))
+            row = cursor.fetchone()
+            return dict(row) if row else None
+
+    yield MockUserModel(db_file=':memory:')
+
+    conn.close()
+
+
+@pytest.fixture(scope='function')
+def mock_auth_service_db(mocker, db_session):
+    mocker.patch.object(auth_service, 'user_model', db_session)
+
+    db_session.create_user(
+        'testuser',
+        'test@example.com',
+        generate_password_hash('password123')
+    )
+    return db_session
+
+
+@pytest.fixture(scope='function')
+def mock_gemini_api_call(mocker):
+    mock_response = Mock()
+    mock_response.text = '```python\ndef generated_function():\n    return True\n```'
+
+    patcher = mocker.patch(
+        'src.services.gemini_service._call_gemini_api',
+        return_value=mock_response
+    )
+    return patcher

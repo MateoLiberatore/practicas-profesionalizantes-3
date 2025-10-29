@@ -1,10 +1,13 @@
 from flask import jsonify
+from werkzeug.exceptions import HTTPException
 
 class APIError(Exception):
     status_code = 500
     def __init__(self, message, status_code=None, payload=None):
+
         Exception.__init__(self)
         self.message = message
+        
         if status_code is not None:
             self.status_code = status_code
         self.payload = payload
@@ -19,5 +22,20 @@ def handle_api_error(error):
     response.status_code = error.status_code
     return response
 
+def handle_exceptions(error):
+
+    if isinstance(error, HTTPException):
+        response = jsonify({'error':error.description})
+        response.status_code = error.code
+
+        return response
+    #para errores de codigo internos
+    print(f"Error Interno No Capturado: {error}")
+    response = jsonify({'error': 'Error interno del servidor. Consulte los logs.'})
+    response.status_code = 500
+    return response
+
+
 def register_error_handlers(app):
     app.register_error_handler(APIError, handle_api_error)
+    app.register_error_handler(Exception, handle_exceptions) # manejar la totalidad de las excepciones

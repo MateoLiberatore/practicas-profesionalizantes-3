@@ -1,8 +1,9 @@
-# src/routes/auth_routes.py
-from flask import Blueprint, jsonify, request
+# src/routes/auth/auth_routes.py
+
+from flask import Blueprint, jsonify, request, g
 from src.controllers.auth_controller import AuthController
 from src.utils.error_handler import APIError
-from flask_login import logout_user, login_required, current_user
+from src.utils.auth_utils import jwt_required 
 
 auth_bp = Blueprint('auth', __name__, url_prefix='/auth')
 
@@ -22,18 +23,24 @@ def login():
     if not data or 'email' not in data or 'password' not in data: 
         raise APIError("Petición inválida. Se espera JSON con 'email' y 'password'.", status_code=400)
 
+    # El servicio devuelve {token:..., user:...}
     user_data = AuthController.handle_login(data)
-    return jsonify({"message": "Login exitoso", "user": user_data}), 200
+    
+    # **IMPORTANTE:** La respuesta de login debe ser {token:..., user:...} para pasar el test
+    return jsonify({"message": "Login exitoso", "data": user_data}), 200
 
 
 @auth_bp.route('/logout', methods=['POST'])
-@login_required
+@jwt_required 
 def logout():
-    logout_user()
-    return jsonify({"message": "Sesión cerrada exitosamente"}), 200
+    return jsonify({"message": "Sesión cerrada exitosamente. El token expirará automáticamente."}), 200
 
 
 @auth_bp.route('/profile', methods=['GET'])
-@login_required
+@jwt_required 
 def get_profile():
-    return jsonify({"message": "Acceso exitoso", "user": current_user.username}), 200
+    # Acceso a los datos cargados por jwt_required en g.current_user
+    user_info = g.current_user
+    
+    # Aquí el test espera que el email sea 'test@example.com'.
+    return jsonify({"message": "Acceso exitoso", "user": user_info}), 200

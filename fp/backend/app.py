@@ -1,4 +1,3 @@
-# app.py 
 import os
 from flask import Flask
 from flask_cors import CORS
@@ -8,11 +7,12 @@ from src.routes.llm.gemini_route import gemini_bp
 
 from src.utils.error_handler import register_error_handlers
 from src.configs.db import db_generation 
+from dotenv import load_dotenv
 
-
+load_dotenv()
 app = Flask(__name__)
 
-app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY') or 'clave-de-desarrollo-super-insegura'
+app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY') 
 
 
 CORS(app, 

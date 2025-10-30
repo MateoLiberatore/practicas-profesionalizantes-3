@@ -1,45 +1,24 @@
-const API_BASE_URL = 'http://localhost:5000/auth';
+const API_URL = "http://localhost:5000/auth/login";
 
-async function loginUser(email, password){
+export const loginUser = async (email, password) => {
+  try {
+    const response = await fetch(API_URL, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ email, password }),
+    });
 
-    try{
+    const data = await response.json();
 
-      const response = await fetch(`${API_BASE_URL}/login`,
-        {
-             method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            credentials: 'include', 
-            body: JSON.stringify({ email: email, password: password }),
-        });
-        
-        if (!response.ok){
-            
-            let errorData = {};
-            const responseText = await response.text();
-            
-            if (responseText) {
-                try {
-                    errorData = JSON.parse(responseText);
-                } catch (jsonError) {
-                    
-                }
-            }
-            
-            throw new Error(errorData.message || `Error ${response.status} en la petición de login.`);
-        }
-
-        return await response.json();
-
-    } 
-    catch(error)
-    {
-        console.error("Error en loginUser (authService):", error.message);
-        throw error;
+    if (!response.ok) {
+      throw new Error(data.message || "Error en login");
     }
-}
 
-export {
-    loginUser
+    return data; // ✅ Retorna { message, data: { token, user } }
+  } catch (error) {
+    console.error("Error en loginUser:", error.message);
+    throw error;
+  }
 };

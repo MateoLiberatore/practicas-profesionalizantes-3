@@ -1,53 +1,50 @@
-import { useState, createContext, useContext } from "react";
-import { loginUser } from '../api/services/authService';
+import { useState, useEffect } from "react";
+import { loginUser } from "../api/services/authService";
 
-// Crear el contexto
-const AuthContext = createContext(null); 
+export const useAuth = () => {
+  const [user, setUser] = useState(null);
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState(null);
+  const [isInitialized, setIsInitialized] = useState(false);
 
-// Crear el Proveedor 
-export function AuthProvider({ children }) { 
-    const [user, setUser] = useState(null); 
-    const [isLoading, setIsLoading] = useState(false);
-    const [error, setError] = useState(null);
-
-    async function handleLogin(email, password) {
-        setIsLoading(true);
-        setError(null);
-        
-        try {
-            const userData = await loginUser(email, password);
-            setUser(userData.user); 
-            console.log("Inicio de sesión exitoso:", userData);
-            
-        } catch (err) {
-            setError(err.message || 'Fallo de conexión. Por favor, revisa el servidor.');
-            setUser(null); 
-            
-        } finally {
-            setIsLoading(false);
-        }
+  useEffect(() => {
+    const storedUser = localStorage.getItem("user");
+    if (storedUser) {
+      setUser(JSON.parse(storedUser));
     }
+    setIsInitialized(true);
+  }, []);
 
-    const value = { 
-        handleLogin, 
-        isLoading, 
-        error, 
-        user 
-    }; 
+  async function handleLogin(email, password) {
+    setIsLoading(true);
+    setError(null);
 
-    return (
-        <AuthContext.Provider value={value}>
-            {children}
-        </AuthContext.Provider>
-    );
-}
-
-//Hook Consumidor
-export function useAuth() {
-    const context = useContext(AuthContext); 
-    
-    if (!context) {
-        throw new Error('useAuth debe usarse dentro de un AuthProvider');
+    try {
+      const response = await loginUser(email, password);
+      const { token, user } = response.data;
+      localStorage.setItem("token", token);
+      localStorage.setItem("user", JSON.stringify(user));
+      setUser(user);
+    } catch (err) {
+      setError(err.message || "Error de conexión");
+      setUser(null);
+    } finally {
+      setIsLoading(false);
     }
-    return context;
-}
+  }
+
+  function handleLogout() {
+    localStorage.removeItem("token");
+    localStorage.removeItem("user");
+    setUser(null);
+  }
+
+  return {
+    user,
+    isLoading,
+    isInitialized,
+    error,
+    handleLogin,
+    handleLogout,
+  };
+};

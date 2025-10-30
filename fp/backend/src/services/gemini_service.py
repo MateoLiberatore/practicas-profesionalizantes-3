@@ -73,14 +73,14 @@ def handle_code_generation(data: dict) -> dict:
         status_code = 500
         if hasattr(e, 'response_json') and e.response_json and 'error' in e.response_json and 'code' in e.response_json['error']:
             status_code = e.response_json['error']['code']
-        raise APIError(f"Error en la API de Gemini. Mensaje original: {e}", status_code=status_code)
+        raise APIError(f"Error en la API de Gemini. Mensaje original: {e}", status_code=status_code, response_json=None)
     except Exception as e:
-        raise APIError(f"Error inesperado al comunicarse con Gemini: {e}", status_code=500)
+        raise APIError(f"Error inesperado al comunicarse con Gemini: {e}", status_code=500, response_json=None)
     
     raw_code = response.text
 
     if not raw_code.strip():
-        raise APIError("Gemini no pudo generar código para las instrucciones proporcionadas.", status_code=500)
+        raise APIError("Gemini no pudo generar código para las instrucciones proporcionadas.", status_code=500, response_json=None)
 
     clean_code = _clean_generated_code(raw_code)
 
@@ -95,4 +95,4 @@ def process_gemini_task(payload: dict):
     if task_type == 'code_generation':
         return handle_code_generation(data)
 
-    raise APIError("Tipo de tarea de Gemini no soportado.", status_code=400)
+    raise APIError("Tipo de tarea de Gemini no soportado.", status_code=400, response_json=None)

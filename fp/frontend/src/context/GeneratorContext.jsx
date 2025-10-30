@@ -23,3 +23,4 @@ export function GeneratorProvider({ children }) {
 export function useGenerator() {
     return useContext(GeneratorContext);
 }
+    

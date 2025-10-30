@@ -6,9 +6,11 @@ class AuthController:
     
     def __init__(self):
         pass
-
+    
+    @staticmethod
     def handle_registration(data):
         return register_user(data)
-
+    
+    @staticmethod
     def handle_login(data):
         return authenticate_user(data.get('email'), data.get('password'))

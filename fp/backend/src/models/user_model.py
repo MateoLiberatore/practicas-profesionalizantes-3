@@ -12,7 +12,7 @@ class UserModel:
             conn.row_factory = sqlite3.Row
             return conn
         except sqlite3.Error as e:
-            raise APIError(f"Error al conectar a la base de datos: {e}", status_code=500)
+            raise APIError(f"Error al conectar a la base de datos: {e}", status_code=500, response_json=None)
 
     def create_user(self, username, email, password):
         conn = self.connect()
@@ -32,9 +32,9 @@ class UserModel:
                     "email": email
                 }
         except sqlite3.IntegrityError:
-            raise APIError("El nombre de usuario o email ya existe.", status_code=409)
+            raise APIError("El nombre de usuario o email ya existe.", status_code=409, response_json=None)
         except sqlite3.Error as e:
-            raise APIError(f"Ocurrió un error al crear el usuario: {e}", status_code=500)
+            raise APIError(f"Ocurrió un error al crear el usuario: {e}", status_code=500, response_json=None)
         finally:
             conn.close()
 
@@ -60,10 +60,8 @@ class UserModel:
         finally:
             conn.close()
 
-    @staticmethod
-    def get_user_by_id(user_id):
-        conn = sqlite3.connect("users.db")
-        conn.row_factory = sqlite3.Row
+    def get_user_by_id(self, user_id):
+        conn = self.connect()
         try:
             with conn:
                 cursor = conn.execute("SELECT * FROM users WHERE id =?", (user_id,))

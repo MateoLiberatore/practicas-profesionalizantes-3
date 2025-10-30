@@ -7,14 +7,15 @@ from flask import Flask
 from werkzeug.security import generate_password_hash
 from dotenv import load_dotenv
 
-BASE_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", ".."))
-if BASE_DIR not in sys.path:
-    sys.path.insert(0, BASE_DIR)
+from src.routes.auth.auth_routes import auth_bp
+from src.routes.llm.gemini_route import gemini_bp
+
 
 load_dotenv()
 
 from src.models.user_model import UserModel
 from src.services import auth_service
+from src.utils import auth_utils
 from src.utils.error_handler import register_error_handlers, APIError
 
 
@@ -23,6 +24,10 @@ def app():
     app = Flask(__name__)
     app.config['SECRET_KEY'] = 'clave_secreta_para_testing_jwt'
     register_error_handlers(app)
+    
+    app.register_blueprint(auth_bp)
+    app.register_blueprint(gemini_bp)
+
     with app.app_context():
         yield app
 
@@ -81,6 +86,12 @@ def db_session():
             cursor.execute("SELECT * FROM users WHERE username=?", (username,))
             row = cursor.fetchone()
             return dict(row) if row else None
+            
+        def get_user_by_id(self, user_id):
+            cursor.execute("SELECT * FROM users WHERE id=?", (user_id,))
+            row = cursor.fetchone()
+            return dict(row) if row else None
+
 
     yield MockUserModel(db_file=':memory:')
 
@@ -90,7 +101,12 @@ def db_session():
 @pytest.fixture(scope='function')
 def mock_auth_service_db(mocker, db_session):
     mocker.patch.object(auth_service, 'user_model', db_session)
-
+    
+    try:
+        mocker.patch.object(auth_utils, 'user_model', db_session)
+    except AttributeError:
+        pass
+    
     db_session.create_user(
         'testuser',
         'test@example.com',

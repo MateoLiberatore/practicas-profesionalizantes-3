@@ -1,3 +1,5 @@
+# src/services/auth_services.py
+
 from src.models.user_model import UserModel
 from werkzeug.security import generate_password_hash, check_password_hash
 from src.utils.error_handler import APIError
@@ -25,8 +27,9 @@ def authenticate_user(email, password):
     if user_data and check_password_hash(user_data['password'], password):
         
         token = create_jwt_token(user_data['id'])
+    
+        user_data.pop('password', None) 
         
-        user_data.pop('password', None)
         return {
             "token": token,
             "user": user_data

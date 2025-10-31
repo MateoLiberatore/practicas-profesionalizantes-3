@@ -3,15 +3,15 @@ from src.controllers.gemini_controller import Gemini_Controller
 from src.utils.error_handler import APIError
 from src.utils.auth_utils import jwt_required
 
-gemini_bp = Blueprint('gemini', __name__, url_prefix='/gemini')
+gemini_bp = Blueprint("gemini", __name__)
 
-@gemini_bp.route('/process', methods=['POST'])
-@jwt_required #middlwware
+@gemini_bp.route("/process", methods=["POST", "OPTIONS"])
+@jwt_required
 def process_task():
     payload = request.get_json()
     if not payload:
-        raise APIError("Petición inválida. Se espera un objeto JSON.", status_code=400) # [3]
+        raise APIError("Petición inválida: se esperaba JSON.", status_code=400)
 
-    response_data = Gemini_Controller.handle_process_task(payload)
-    
-    return jsonify(response_data), 200
+    response = Gemini_Controller.handle_process_task(payload)
+    return jsonify(response), 200
+

@@ -17,7 +17,7 @@ class APIError(Exception):
     def to_dict(self):
         rv = dict(self.payload or ())
         
-        # Mapeo de códigos de estado a tipos de error para uso programático
+        # Mapeo de códigos de estado a tipos de error 
         error_type_mapping = {
             400: 'BAD_REQUEST',
             401: 'UNAUTHORIZED',
@@ -27,7 +27,6 @@ class APIError(Exception):
             500: 'INTERNAL_SERVER_ERROR'
         }
         
-        # Estructura de respuesta detallada
         rv['status'] = self.status_code
         rv['error_type'] = error_type_mapping.get(self.status_code, 'UNKNOWN_ERROR')
         rv['message'] = self.message

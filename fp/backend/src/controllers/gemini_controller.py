@@ -15,7 +15,7 @@ class Gemini_Controller:
             raise e
         except Exception as e:
             # errores internos
-            print(f"Error interno en GeminiController: {e}")
+            print(f"Error interno en Gemini_Controller: {e}")
             raise APIError("Error interno del servidor al procesar la tarea de IA.", status_code=500) # 
 
 gemini_controller = Gemini_Controller()

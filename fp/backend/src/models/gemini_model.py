@@ -1,8 +1,9 @@
-# src/models/gemini_model.py
 from src.utils.error_handler import APIError
 
 class GeminiRequestModel:
-    SUPPORTED_TASK_TYPES = ["code_generation"]
+    
+    #soporte para a futuro agregar mas tareas ej: "error_fixing"
+    SUPPORTED_TASK_TYPES = ["code_generation"] 
 
     @staticmethod
     def validate_code_generation_data(data):
@@ -12,24 +13,27 @@ class GeminiRequestModel:
         if missing:
             raise APIError(f"Faltan campos obligatorios para generación de código en 'data': {', '.join(missing)}", status_code=400) # [1]
 
-
+        #chequeo de requerimientos minimos "lenguaje"
         if not isinstance(data['target_language'], str) or not data['target_language'].strip():
-             raise APIError("El campo 'target_language' es inválido o está vacío.", status_code=400) #chequeo de requerimientos minimos "lenguaje"
-
+             raise APIError("El campo 'target_language' es inválido o está vacío.", status_code=400) 
+        
+        # chequeo de requerimientos minimos "instrucciones"
         if not isinstance(data['user_instructions'], str) or not data['user_instructions'].strip():
-             raise APIError("El campo 'user_instructions' es inválido o está vacío.", status_code=400) # chequeo de requerimientos minimos "instrucciones"
+             raise APIError("El campo 'user_instructions' es inválido o está vacío.", status_code=400) 
              
-        # Validación de campos opcionales para contexto/estilo (deben ser objetos) 
+        #chequeo de contenido de "headers" "constructor" "Metodos"
         if 'context_headers' in data and not isinstance(data['context_headers'], dict):
-            raise APIError("El campo 'context_headers' debe ser un objeto JSON.", status_code=400) #chequeo de contenido de "headers" "constructor" "Metodos"
-
+            raise APIError("El campo 'context_headers' debe ser un objeto JSON.", status_code=400) 
+        
+        #chequeo de seccion de especificaciones
         if 'style_config' in data and not isinstance(data['style_config'], dict):
-            raise APIError("El campo 'style_config' debe ser un objeto JSON.", status_code=400) #chequeo de seccion de especificaciones
+            raise APIError("El campo 'style_config' debe ser un objeto JSON.", status_code=400) 
 
         return data
 
     @classmethod
     def validate_request(cls, payload):
+        
         if not isinstance(payload, dict):
             raise APIError("Payload inválido. Se espera un objeto JSON.", status_code=400)
 

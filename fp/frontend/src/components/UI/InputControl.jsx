@@ -11,13 +11,9 @@ function InputControl({
     placeholder = '',
     type = 'text',
     disabled = false,
-    'data-index': dataIndex,
-    'data-method': dataMethod,
-    'data-param': dataParam,
-    'data-task': dataTask,
-    className = 'input-container text-primary-400',     // ✅ valor por defecto según tu CSS
-    spanClass = 'text-primary-400',   // ✅ color coherente con tu paleta
-    inputClass = 'input-style'         // ✅ clase existente en tu CSS
+    className = '',   
+    spanClass = '',   
+    inputClass = 'input-style'         
 }) {
     return (
         <div className={className}>
@@ -30,10 +26,6 @@ function InputControl({
                 value={value ?? ''}
                 onChange={onChange}
                 disabled={disabled}
-                data-index={dataIndex}
-                data-method={dataMethod}
-                data-param={dataParam}
-                data-task={dataTask}
             />
         </div>
     );

@@ -1,21 +1,33 @@
-import React, { useState } from "react";
-import { useFormHeaders } from "../../hooks/useFormHeaders";
+
+import React, { useState, useEffect } from "react";
 import CollapsibleSection from "../../components/UI/CollapsibleSection";
 import InputControl from "../../components/UI/InputControl";
 import Button from "../../components/UI/Button";
 import ListItem from "../../components/UI/ListItem";
+import { useFormHeaders } from "../../hooks/useFormHeaders";
 
-function FormHeaders() {
-  const { 
-    language, setLanguage, 
-    imports, handleAddImport, removeImport,
-    specs, handleAddSpec, removeSpec
-  } = useFormHeaders();
+function FormHeaders(props) {
+  // props may include: language, setLanguage, imports, handleAddImport, etc.
+  const fallback = useFormHeaders();
+  const language = props.language ?? fallback.language;
+  const setLanguage = props.setLanguage ?? fallback.setLanguage;
+  const imports = props.imports ?? fallback.imports;
+  const handleAddImport = props.handleAddImport ?? fallback.handleAddImport;
+  const removeImport = props.handleRemoveImport ?? fallback.handleRemoveImport;
+  const specs = props.specs ?? fallback.specs;
+  const handleAddSpec = props.handleAddSpec ?? fallback.handleAddSpec;
+  const removeSpec = props.handleRemoveSpec ?? fallback.handleRemoveSpec;
+  const variables = props.variables ?? fallback.variables;
+  const setVariables = props.setVariables ?? fallback.setVariables;
 
   const [newImport, setNewImport] = useState("");
   const [newSpec, setNewSpec] = useState("");
+  const [newVars, setNewVars] = useState(variables || "");
 
-  const handleSync = () => {};
+  useEffect(() => {
+    if (setVariables) setVariables(newVars);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [newVars]);
 
   const handleAddImportWrapper = () => {
     if (newImport.trim()) {
@@ -32,22 +44,21 @@ function FormHeaders() {
   };
 
   return (
-    <CollapsibleSection onChange={handleSync}>
+    <CollapsibleSection>
       <div className="class-headers">
-
         <div className="col-span-full md:col-span-2 form-field-container">
           <label className="label-style">Lenguaje</label>
           <InputControl
             placeholder="Lenguaje >"
             value={language}
             onChange={(e) => setLanguage(e.target.value)}
-            className="input-container flex-1 text-primary-400 text-2xl" classInput="input-style"
+            className="input-container"
+            classInput="input-style"
           />
         </div>
 
-        <div className="form-field-container"> 
+        <div className="form-field-container">
           <label className="label-style">Imports</label>
-          
           {imports.length > 0 && (
             <div className="space-y-2 mt-2">
               {imports.map((item, i) => (
@@ -55,13 +66,12 @@ function FormHeaders() {
               ))}
             </div>
           )}
-
           <div className="form-add-row">
             <InputControl
               placeholder="Nuevo import >"
               value={newImport}
               onChange={(e) => setNewImport(e.target.value)}
-              className="input-container flex-1 text-primary-400 text-2xl"
+              className="input-container"
               classInput="input-style"
             />
             <Button onClick={handleAddImportWrapper} className="header-add-button">
@@ -72,7 +82,6 @@ function FormHeaders() {
 
         <div className="form-field-container">
           <label className="label-style">Especificaciones</label>
-          
           {specs.length > 0 && (
             <div className="space-y-2 mt-2">
               {specs.map((item, i) => (
@@ -80,13 +89,12 @@ function FormHeaders() {
               ))}
             </div>
           )}
-
           <div className="form-add-row">
             <InputControl
               placeholder="Nueva especificación >"
               value={newSpec}
               onChange={(e) => setNewSpec(e.target.value)}
-              className="input-container flex-1 text-primary-400 text-2xl"
+              className="input-container"
               classInput="input-style"
             />
             <Button onClick={handleAddSpecWrapper} className="header-add-button">

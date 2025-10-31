@@ -184,6 +184,7 @@ body {
   font-medium
   p-4 rounded-md 
   w-full
+  text-primary-400
 } 
 
 @utility input-style {

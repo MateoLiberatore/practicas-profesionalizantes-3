@@ -7,7 +7,6 @@ from src.utils.error_handler import APIError
 
 pytestmark = pytest.mark.integration
 
-
 @pytest.fixture(scope="session")
 def gemini_client():
     api_key = os.getenv("GEMINI_API_KEY")

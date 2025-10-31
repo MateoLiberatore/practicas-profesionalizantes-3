@@ -1,26 +1,29 @@
-const GEMINI_URL = "http://localhost:5000/gemini/process";
+const GEMINI_ENDPOINT = "http://localhost:5000/api/v1/gemini/process";
 
 export async function sendCodeGenerationRequest(payload) {
-  try {
-    const token = localStorage.getItem("token");
+  const token = localStorage.getItem("token");
 
-    const response = await fetch(GEMINI_URL, {
+  try {
+    const headers = { "Content-Type": "application/json" };
+    if (token) headers["Authorization"] = `Bearer ${token}`;
+
+    const res = await fetch(GEMINI_ENDPOINT, {
       method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`,
-      },
+      headers,
       body: JSON.stringify(payload),
     });
 
-    if (!response.ok) {
-      const errorData = await response.json();
-      throw new Error(errorData.message || "Error al generar código.");
+    if (!res.ok) {
+      let body = {};
+      try {
+        body = await res.json();
+      } catch {}
+      throw new Error(body.message || `Error ${res.status} en generación`);
     }
 
-    return await response.json();
+    return await res.json();
   } catch (error) {
-    console.error("Error en sendCodeGenerationRequest:", error.message);
-    throw error;
+    console.error("Error en GeminiService:", error);
+    throw new Error(error.message || "Error de conexión con el servidor.");
   }
 }

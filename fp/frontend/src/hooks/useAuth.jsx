@@ -1,50 +1,54 @@
-import { useState, useEffect } from "react";
-import { loginUser } from "../api/services/authService";
+import React, { createContext, useContext, useState, useEffect } from "react";
+import { loginUser, getProfile } from "../api/services/authService";
 
-export const useAuth = () => {
+const AuthContext = createContext();
+
+export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
-  const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState(null);
   const [isInitialized, setIsInitialized] = useState(false);
 
+  // ✅ Mantener sesión tras refrescar
   useEffect(() => {
-    const storedUser = localStorage.getItem("user");
-    if (storedUser) {
-      setUser(JSON.parse(storedUser));
+    const token = localStorage.getItem("token");
+    if (token) {
+      getProfile(token)
+        .then((profile) => setUser(profile))
+        .catch(() => {
+          localStorage.removeItem("token");
+          setUser(null);
+        })
+        .finally(() => setIsInitialized(true));
+    } else {
+      setIsInitialized(true);
     }
-    setIsInitialized(true);
   }, []);
 
-  async function handleLogin(email, password) {
-    setIsLoading(true);
-    setError(null);
-
+  // ✅ Login
+  const handleLogin = async (email, password) => {
     try {
-      const response = await loginUser(email, password);
-      const { token, user } = response.data;
-      localStorage.setItem("token", token);
-      localStorage.setItem("user", JSON.stringify(user));
-      setUser(user);
+      const data = await loginUser(email, password);
+      if (data?.token) {
+        localStorage.setItem("token", data.token);
+        const profile = await getProfile(data.token);
+        setUser(profile);
+      }
     } catch (err) {
-      setError(err.message || "Error de conexión");
-      setUser(null);
-    } finally {
-      setIsLoading(false);
+      console.error("Error al iniciar sesión:", err);
+      alert("Credenciales inválidas");
     }
-  }
-
-  function handleLogout() {
-    localStorage.removeItem("token");
-    localStorage.removeItem("user");
-    setUser(null);
-  }
-
-  return {
-    user,
-    isLoading,
-    isInitialized,
-    error,
-    handleLogin,
-    handleLogout,
   };
+
+  // ✅ Logout
+  const handleLogout = () => {
+    localStorage.removeItem("token");
+    setUser(null);
+  };
+
+  return (
+    <AuthContext.Provider value={{ user, isInitialized, handleLogin, handleLogout }}>
+      {children}
+    </AuthContext.Provider>
+  );
 };
+
+export const useAuth = () => useContext(AuthContext);

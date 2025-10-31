@@ -1,5 +1,3 @@
-# src/services/auth_services.py
-
 from src.models.user_model import UserModel
 from werkzeug.security import generate_password_hash, check_password_hash
 from src.utils.error_handler import APIError

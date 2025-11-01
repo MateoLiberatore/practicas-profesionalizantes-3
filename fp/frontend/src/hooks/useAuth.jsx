@@ -7,7 +7,7 @@ export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [isInitialized, setIsInitialized] = useState(false);
 
-  // ✅ Mantener sesión tras refrescar
+  
   useEffect(() => {
     const token = localStorage.getItem("token");
     if (token) {

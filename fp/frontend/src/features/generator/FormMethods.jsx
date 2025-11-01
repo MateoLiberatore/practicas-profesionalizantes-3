@@ -1,8 +1,7 @@
-// src/features/generator/FormMethods.jsx
 import React, { useState } from "react";
 import InputControl from "../../components/UI/InputControl";
 import Button from "../../components/UI/Button";
-import CollapsibleSection from "../../components/UI/CollapsibleSection";
+import CollapsibleSection from "../../components/elements/CollapsibleSection";
 import ListItem from "../../components/UI/ListItem";
 import { useFormMethods } from "../../hooks/useFormMethods";
 
@@ -19,44 +18,81 @@ function FormMethods(props) {
   const addListItem = props.addListItem ?? fallback.addListItem;
   const removeListItem = props.removeListItem ?? fallback.removeListItem;
 
-  const [newMethodParam, setNewMethodParam] = useState("");
-  const [newMethodTask, setNewMethodTask] = useState("");
+  const [newMethodParams, setNewMethodParams] = useState({});
+  const [newMethodTasks, setNewMethodTasks] = useState({});
 
-  const handleAddParamWrapper = (methodIndex) => {
-    if (newMethodParam.trim()) {
-      addListItem(methodIndex, "params", newMethodParam.trim());
-      setNewMethodParam("");
-    }
-  };
+  function handleNewMethodChange(e) {
+    if (setNewMethod) setNewMethod(e.target.value);
+  }
 
-  const handleAddTaskWrapper = (methodIndex) => {
-    if (newMethodTask.trim()) {
-      addListItem(methodIndex, "tasks", newMethodTask.trim());
-      setNewMethodTask("");
+  function handleAddNewMethod() {
+    handleAddMethod();
+  }
+
+  function handleParamInputChange(e, methodIndex) {
+    const value = e.target.value;
+    setNewMethodParams((prev) => ({ ...prev, [methodIndex]: value }));
+  }
+
+  function handleTaskInputChange(e, methodIndex) {
+    const value = e.target.value;
+    setNewMethodTasks((prev) => ({ ...prev, [methodIndex]: value }));
+  }
+
+  function handleAddParamClick(methodIndex) {
+    const value = newMethodParams[methodIndex];
+    if (value && value.trim()) {
+      addListItem(methodIndex, "params", value.trim());
+      setNewMethodParams((prev) => ({ ...prev, [methodIndex]: "" }));
     }
-  };
+  }
+
+  function handleAddTaskClick(methodIndex) {
+    const value = newMethodTasks[methodIndex];
+    if (value && value.trim()) {
+      addListItem(methodIndex, "tasks", value.trim());
+      setNewMethodTasks((prev) => ({ ...prev, [methodIndex]: "" }));
+    }
+  }
+
+  function handleRemoveParamClick(methodIndex, paramIndex) {
+    removeListItem(methodIndex, "params", paramIndex);
+  }
+
+  function handleRemoveTaskClick(methodIndex, taskIndex) {
+    removeListItem(methodIndex, "tasks", taskIndex);
+  }
+
+  function handleRemoveMethodClick(methodIndex) {
+    handleRemoveMethod(methodIndex);
+  }
 
   return (
-    <CollapsibleSection>
+    <CollapsibleSection title=">Methods">
       <div className="class-methods">
         <label className="label-style">Nuevo Método</label>
 
         <div className="flex gap-2 items-baseline mb-6">
           <InputControl
             value={newMethod}
-            onChange={(e) => setNewMethod(e.target.value)}
+            onChange={handleNewMethodChange}
             placeholder="Nuevo_metodo>"
             className="input-container flex-1"
             classInput="input-style"
           />
-          <Button type="primary" onClick={handleAddMethod} className="header-add-button">
+          <Button type="primary" onClick={handleAddNewMethod} className="header-add-button">
             Crear Método
           </Button>
         </div>
 
         <div className="methods-list-container space-y-4">
           {methods.map((method, i) => (
-            <CollapsibleSection key={i} data-index={i}>
+            <CollapsibleSection
+              key={i}
+              className="bg-secondary-600 p-0"
+              title={">" + (method.name || `Método ${i + 1}`)}
+              defaultOpen={true}
+            >
               <div className="method-content bg-secondary-300 p-5 rounded-lg">
                 <div className="grid grid-cols-2 gap-4">
                   <div className="form-field-container">
@@ -78,19 +114,23 @@ function FormMethods(props) {
                     {method.params.length > 0 && (
                       <div className="space-y-2 mt-2">
                         {method.params.map((p, pIdx) => (
-                          <ListItem key={pIdx} label={p} onRemove={() => removeListItem(i, "params", pIdx)} />
+                          <ListItem
+                            key={pIdx}
+                            label={p}
+                            onRemove={() => handleRemoveParamClick(i, pIdx)}
+                          />
                         ))}
                       </div>
                     )}
                     <div className="form-add-row mt-2">
                       <InputControl
-                        value={newMethodParam}
-                        onChange={(e) => setNewMethodParam(e.target.value)}
+                        value={newMethodParams[i] || ""}
+                        onChange={(e) => handleParamInputChange(e, i)}
                         placeholder="Nuevo_parámetro>"
                         className="input-container flex-1"
                         classInput="input-style"
                       />
-                      <Button onClick={() => handleAddParamWrapper(i)} className="header-add-button">
+                      <Button onClick={() => handleAddParamClick(i)} className="header-add-button">
                         Agregar
                       </Button>
                     </div>
@@ -101,19 +141,23 @@ function FormMethods(props) {
                     {method.tasks.length > 0 && (
                       <div className="space-y-2 mt-2">
                         {method.tasks.map((t, tIdx) => (
-                          <ListItem key={tIdx} label={t} onRemove={() => removeListItem(i, "tasks", tIdx)} />
+                          <ListItem
+                            key={tIdx}
+                            label={t}
+                            onRemove={() => handleRemoveTaskClick(i, tIdx)}
+                          />
                         ))}
                       </div>
                     )}
                     <div className="form-add-row mt-2">
                       <InputControl
-                        value={newMethodTask}
-                        onChange={(e) => setNewMethodTask(e.target.value)}
+                        value={newMethodTasks[i] || ""}
+                        onChange={(e) => handleTaskInputChange(e, i)}
                         placeholder="Nueva_tarea>"
                         className="input-container flex-1"
                         classInput="input-style"
                       />
-                      <Button onClick={() => handleAddTaskWrapper(i)} className="header-add-button">
+                      <Button onClick={() => handleAddTaskClick(i)} className="header-add-button">
                         Agregar
                       </Button>
                     </div>
@@ -133,7 +177,7 @@ function FormMethods(props) {
                 </div>
 
                 <div className="form-field-container flex items-end justify-end">
-                  <Button type="secondary" onClick={() => handleRemoveMethod(i)} className="header-delete-button">
+                  <Button type="danger" onClick={() => handleRemoveMethodClick(i)}>
                     Eliminar Método
                   </Button>
                 </div>

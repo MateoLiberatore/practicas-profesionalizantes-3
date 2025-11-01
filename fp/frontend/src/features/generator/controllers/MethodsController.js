@@ -29,22 +29,22 @@ export function removeMethod(event, methods) {
 }
 
 export function handleMethodNameChange(event, methods) {
+  
     const index = parseInt(event.target.getAttribute("data-index"), 10);
-    const newName = event.target.value;
-    if (isNaN(index) || !newName) return methods;
-    const updated = methods.map(function updateName(m, i) {
-        if (i === index) {
-            return { ...m, name: newName };
-        }
-        return m;
-    });
-    return updated;
+  const newName = event.target.value;
+
+  if (isNaN(index)) return methods;
+  return methods.map((m, i) =>
+    i === index ? { ...m, name: newName } : m
+  );
 }
 
 export function handleReturnChange(event, methods) {
     const index = parseInt(event.target.getAttribute("data-index"), 10);
     const newValue = event.target.value;
+
     if (isNaN(index)) return methods;
+    
     const updated = methods.map(function updateReturn(m, i) {
         if (i === index) {
             return { ...m, returnValue: newValue };

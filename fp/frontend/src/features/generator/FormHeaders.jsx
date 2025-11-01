@@ -1,22 +1,26 @@
-
 import React, { useState, useEffect } from "react";
-import CollapsibleSection from "../../components/UI/CollapsibleSection";
+import CollapsibleSection from "../../components/elements/CollapsibleSection";
 import InputControl from "../../components/UI/InputControl";
 import Button from "../../components/UI/Button";
 import ListItem from "../../components/UI/ListItem";
 import { useFormHeaders } from "../../hooks/useFormHeaders";
 
+/**
+ * @component FormHeaders
+ * Mantiene la estructura desacoplada (fallback hook + props opcionales).
+ * Corrige el handler de eliminación de especificaciones.
+ */
 function FormHeaders(props) {
-  // props may include: language, setLanguage, imports, handleAddImport, etc.
   const fallback = useFormHeaders();
+
   const language = props.language ?? fallback.language;
   const setLanguage = props.setLanguage ?? fallback.setLanguage;
   const imports = props.imports ?? fallback.imports;
   const handleAddImport = props.handleAddImport ?? fallback.handleAddImport;
-  const removeImport = props.handleRemoveImport ?? fallback.handleRemoveImport;
+  const handleRemoveImport = props.handleRemoveImport ?? fallback.handleRemoveImport;
   const specs = props.specs ?? fallback.specs;
   const handleAddSpec = props.handleAddSpec ?? fallback.handleAddSpec;
-  const removeSpec = props.handleRemoveSpec ?? fallback.handleRemoveSpec;
+  const handleRemoveSpec = props.handleRemoveSpec ?? fallback.handleRemoveSpec;
   const variables = props.variables ?? fallback.variables;
   const setVariables = props.setVariables ?? fallback.setVariables;
 
@@ -24,45 +28,62 @@ function FormHeaders(props) {
   const [newSpec, setNewSpec] = useState("");
   const [newVars, setNewVars] = useState(variables || "");
 
-  useEffect(() => {
-    if (setVariables) setVariables(newVars);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [newVars]);
+  function handleLanguageChange(e) {
+    if (setLanguage) setLanguage(e.target.value);
+  }
 
-  const handleAddImportWrapper = () => {
+  function handleImportInputChange(e) {
+    setNewImport(e.target.value);
+  }
+
+  function handleSpecInputChange(e) {
+    setNewSpec(e.target.value);
+  }
+
+  function handleVariableChange(e) {
+    setNewVars(e.target.value);
+  }
+
+  function handleAddImportClick() {
     if (newImport.trim()) {
       handleAddImport(newImport.trim());
       setNewImport("");
     }
-  };
+  }
 
-  const handleAddSpecWrapper = () => {
+  function handleAddSpecClick() {
     if (newSpec.trim()) {
       handleAddSpec(newSpec.trim());
       setNewSpec("");
     }
-  };
+  }
+
+  useEffect(() => {
+    if (setVariables) setVariables(newVars);
+  }, [newVars, setVariables]);
 
   return (
-    <CollapsibleSection>
+    <CollapsibleSection title=">Headers">
       <div className="class-headers">
+        {/* Lenguaje */}
         <div className="col-span-full md:col-span-2 form-field-container">
           <label className="label-style">Lenguaje</label>
           <InputControl
             placeholder="Lenguaje >"
             value={language}
-            onChange={(e) => setLanguage(e.target.value)}
-            className="input-container"
+            onChange={handleLanguageChange}
+            className="input-container w-1/2"
             classInput="input-style"
           />
         </div>
 
+        {/* Imports */}
         <div className="form-field-container">
           <label className="label-style">Imports</label>
           {imports.length > 0 && (
             <div className="space-y-2 mt-2">
               {imports.map((item, i) => (
-                <ListItem key={i} label={item} onRemove={() => removeImport(i)} />
+                <ListItem key={i} label={item} onRemove={() => handleRemoveImport(i)} />
               ))}
             </div>
           )}
@@ -70,22 +91,23 @@ function FormHeaders(props) {
             <InputControl
               placeholder="Nuevo import >"
               value={newImport}
-              onChange={(e) => setNewImport(e.target.value)}
+              onChange={handleImportInputChange}
               className="input-container"
               classInput="input-style"
             />
-            <Button onClick={handleAddImportWrapper} className="header-add-button">
+            <Button onClick={handleAddImportClick} className="header-add-button">
               Agregar
             </Button>
           </div>
         </div>
 
+        {/* Especificaciones */}
         <div className="form-field-container">
           <label className="label-style">Especificaciones</label>
           {specs.length > 0 && (
             <div className="space-y-2 mt-2">
               {specs.map((item, i) => (
-                <ListItem key={i} label={item} onRemove={() => removeSpec(i)} />
+                <ListItem key={i} label={item} onRemove={() => handleRemoveSpec(i)} />
               ))}
             </div>
           )}
@@ -93,11 +115,11 @@ function FormHeaders(props) {
             <InputControl
               placeholder="Nueva especificación >"
               value={newSpec}
-              onChange={(e) => setNewSpec(e.target.value)}
+              onChange={handleSpecInputChange}
               className="input-container"
               classInput="input-style"
             />
-            <Button onClick={handleAddSpecWrapper} className="header-add-button">
+            <Button onClick={handleAddSpecClick} className="header-add-button">
               Agregar
             </Button>
           </div>

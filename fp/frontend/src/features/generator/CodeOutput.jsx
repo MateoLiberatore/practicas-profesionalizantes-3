@@ -1,61 +1,45 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
+import { Copy, Trash2 } from "lucide-react";
+import Button from "../../components/UI/Button";
 
-function formatCode(raw) {
-  if (!raw) return "";
-  let s = raw.trim();
-  // eliminar triple backticks si existen
-  if (s.startsWith("```")) {
-    s = s.replace(/^```[a-zA-Z0-9]*\n?/, "");
-    s = s.replace(/\n?```$/, "");
+function CodeOutput({ code, onClear, onCopy, loading }) {
+  function handleCopyClick() {
+    if (typeof onCopy === "function") onCopy(code);
   }
-  return s;
-}
 
-function CodeOutput({ code, onClear }) {
-  const [text, setText] = useState("");
-
-  useEffect(() => {
-    setText(formatCode(code));
-  }, [code]);
-
-  const handleCopy = async () => {
-    try {
-      await navigator.clipboard.writeText(text);
-      // feedback simple
-      alert("Código copiado al portapapeles");
-    } catch {
-      alert("No se pudo copiar. Usa Ctrl+C");
-    }
-  };
-
-  if (!text) {
-    return (
-      <div className="bg-secondary-800 text-primary-200 p-6 rounded-2xl shadow-lg w-full h-full">
-        <div className="text-center text-sm opacity-60">Aquí aparecerá el código generado</div>
-      </div>
-    );
+  function handleClearClick() {
+    if (typeof onClear === "function") onClear();
   }
 
   return (
-    <div className="bg-secondary-700 text-primary-100 p-6 rounded-2xl shadow-lg w-full h-full flex flex-col">
-      <div className="flex justify-between items-center mb-4">
-        <h3 className="text-2xl font-bold">Código Generado</h3>
-        <div className="flex gap-2">
-          <button onClick={handleCopy} className="bg-primary-500 text-secondary-900 px-3 py-1 rounded-md">
-            Copiar
-          </button>
-          <button onClick={() => { setText(""); onClear && onClear(); }} className="bg-terciary-500 text-white px-3 py-1 rounded-md">
-            Limpiar
-          </button>
+    <div className="code-output-container slide-fade-in w-full">
+      <div className="code-output-header">
+        <h2 className="code-output-title">&gt; Código Generado</h2>
+        <div className="code-output-actions">
+          <Button onClick={handleCopyClick} type="primary">
+            <Copy size={16} />
+       
+          </Button>
+          <Button onClick={handleClearClick} type="danger">
+            <Trash2 size={16} />
+            
+          </Button>
         </div>
       </div>
 
-      <textarea
-        readOnly
-        value={text}
-        onChange={(e) => setText(e.target.value)}
-        className="bg-secondary-800 p-4 rounded-md text-left text-sm h-full resize-none whitespace-pre-wrap"
-      />
+      {loading ? (
+        <div className="flex justify-center items-center h-32">
+          <div className="spinner"></div>
+        </div>
+      ) : code ? (
+        <pre className="bg-secondary-800 p-4 rounded-xl overflow-x-auto text-primary-100 font-mono text-sm smooth-fade">
+          {code}
+        </pre>
+      ) : (
+        <p className="text-secondary-400 text-center py-4">
+          Aún no se ha generado código.
+        </p>
+      )}
     </div>
   );
 }

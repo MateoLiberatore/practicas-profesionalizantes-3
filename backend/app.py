@@ -7,7 +7,7 @@ from src.routes.auth.auth_routes import auth_bp
 from src.routes.llm.gemini_route import gemini_bp
 
 from src.utils.error_handler import register_error_handlers
-from src.configs.db import db_generation
+from src.configs.db import db_generation, generate_test_data
 
 load_dotenv()
 app = Flask(__name__)
@@ -22,6 +22,7 @@ CORS(
 )
 
 db_generation()
+
 
 app.register_blueprint(auth_bp, url_prefix="/api/v1/auth")
 app.register_blueprint(gemini_bp, url_prefix="/api/v1/gemini")

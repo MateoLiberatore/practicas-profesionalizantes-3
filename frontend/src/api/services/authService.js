@@ -23,7 +23,6 @@ export const loginUser = async (email, password) => {
     }
 
     const data = await response.json();
-    console.log("Server Response (login):", data);
     return data;
   } catch (error) {
     console.error("Error in loginUser:", error.message);

@@ -23,8 +23,8 @@ def create_jwt_token(user_id):
     """Genera un JWT con expiración de 24 horas"""
     try:
         secret_key = get_secret_key()
-        if not secret_key or secret_key == "default-jwt-secret-key":
-            raise ValueError("Clave secreta no configurada correctamente.")
+        if not secret_key :
+            raise ValueError("Clave secreta no configurada correctamente o inexistente.")
 
         expiration_time = datetime.datetime.now(datetime.UTC) + datetime.timedelta(hours=24)
         payload = {

@@ -26,8 +26,9 @@ function Login() {
   }
 
   return (
+    
     <form onSubmit={handleSubmit} className="login-form">
-      <h2 className="login-title">Iniciar Sesión</h2>
+      <h2 className="login-title">Login</h2>
 
       <InputControl
         type="email"

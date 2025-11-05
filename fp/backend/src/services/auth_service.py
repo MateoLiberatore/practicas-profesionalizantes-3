@@ -21,6 +21,7 @@ def register_user(data):
 def authenticate_user(email, password):
     
     user_data = user_model.get_user_by_email(email)
+    #username = user_model.get.....
 
     if user_data and check_password_hash(user_data['password'], password):
         

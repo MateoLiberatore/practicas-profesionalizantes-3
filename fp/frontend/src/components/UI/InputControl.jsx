@@ -14,7 +14,7 @@ function InputControl({
   className = '',
   spanClass = '',
   inputClass = 'input-style',
-  ...rest        // <--- Captura cualquier prop adicional
+  ...rest        
 }) {
   return (
     <div className={className}>

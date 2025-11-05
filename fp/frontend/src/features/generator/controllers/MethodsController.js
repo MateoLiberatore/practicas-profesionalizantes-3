@@ -1,3 +1,4 @@
+
 export function addMethod(methods, newMethodName) {
     if (!newMethodName || typeof newMethodName !== "string") {
         return methods;

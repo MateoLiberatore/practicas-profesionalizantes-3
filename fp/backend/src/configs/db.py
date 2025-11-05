@@ -1,5 +1,4 @@
 import sqlite3
-from src.utils.error_handler import APIError
 from werkzeug.security import generate_password_hash
 
 def db_generation():
@@ -25,7 +24,8 @@ def generate_test_data():
     test_users = [
         ('usuario1', 'test1@example.com', generate_password_hash('password123')),
         ('usuario2', 'test2@example.com', generate_password_hash('otra_pass_segura')),
-        ('admin', 'admin@example.com', generate_password_hash('admin_pass'))
+        ('admin', 'admin@example.com', generate_password_hash('admin_pass')),
+        ('guest', 'guest@example.com', generate_password_hash('guest'))
     ]
 
     try:
@@ -63,3 +63,4 @@ def show_all_users():
 
     conn.close()
 
+show_all_users()

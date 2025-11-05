@@ -2,9 +2,18 @@ import React from "react";
 import { Copy, Trash2 } from "lucide-react";
 import Button from "../../components/UI/Button";
 
-function CodeOutput({ code, onClear, onCopy, loading }) {
-  function handleCopyClick() {
-    if (typeof onCopy === "function") onCopy(code);
+function CodeOutput({ code, onClear, loading }) {
+
+  async function handleCopyClick() {
+    if (!code) return;
+
+    try {
+      await navigator.clipboard.writeText(code);
+      alert("¡Código copiado al portapapeles!");
+    } catch (err) {
+      console.error('Error al copiar el texto: ', err);
+      alert("Error al copiar el código.");
+    }
   }
 
   function handleClearClick() {
@@ -16,13 +25,11 @@ function CodeOutput({ code, onClear, onCopy, loading }) {
       <div className="code-output-header">
         <h2 className="code-output-title">&gt; Código Generado</h2>
         <div className="code-output-actions">
-          <Button onClick={handleCopyClick} type="primary">
+          <Button onClick={handleCopyClick} type="primary" disabled={!code}>
             <Copy size={16} />
-       
           </Button>
           <Button onClick={handleClearClick} type="danger">
             <Trash2 size={16} />
-            
           </Button>
         </div>
       </div>

@@ -8,6 +8,7 @@ MODEL_NAME = "gemini-2.5-flash"
 SYSTEM_INSTRUCTION_CODE_GENERATOR = (
     "Eres un generador de código experto y eficiente. Tu única respuesta debe ser el bloque de código "
     "completo en el lenguaje {language}. No añadas explicaciones, texto introductorio, ni texto de conclusión."
+    "Los comentarios en el codigo deben ser breves y atómicos para documentar lo necesario"
 )
 
 def get_gemini_client():

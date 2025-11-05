@@ -1,8 +1,7 @@
 import React, { useState } from "react";
-
+import Button from "../UI/Button";
 function CollapsibleSection({ title, sectionTitle, children, defaultOpen = true, className = "" }) {
   const [isOpen, setIsOpen] = useState(defaultOpen);
-  // soporte de compatibilidad: prioridad props.title -> props.sectionTitle
   const headerTitle = title ?? sectionTitle ?? "";
 
   function handleToggle() {
@@ -16,14 +15,14 @@ function CollapsibleSection({ title, sectionTitle, children, defaultOpen = true,
           {headerTitle}
         </span>
 
-        <button
-          type="button"
+        <Button
+          type="secondary"
           onClick={handleToggle}
           className="hide-show"
           aria-expanded={isOpen}
         >
-          {isOpen ? "Ocultar" : "Mostrar"}
-        </button>
+          {isOpen ? "Hide" : "Show"}
+        </Button>
       </div>
 
       <div

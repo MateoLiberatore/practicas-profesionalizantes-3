@@ -1,9 +1,5 @@
 import React from 'react';
 
-/**
- * @component InputControl
- * @description Campo de entrada controlado, determinista y reutilizable.
- */
 function InputControl({
   id,
   value,

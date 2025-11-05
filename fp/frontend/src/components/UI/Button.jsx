@@ -1,10 +1,7 @@
 import React from "react";
 import PropTypes from "prop-types";
 
-/**
- * @component Button
- * @description Botón reutilizable con soporte para variantes y estado de carga.
- */
+
 function Button({
   children,
   onClick,
@@ -37,7 +34,7 @@ function Button({
       disabled={disabled || loading}
       className={buttonClass}
     >
-      {loading ? "Generando..." : children}
+      {loading ? "Generating..." : children}
     </button>
   );
 }

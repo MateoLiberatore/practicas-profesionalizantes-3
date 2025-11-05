@@ -18,12 +18,12 @@ export async function sendCodeGenerationRequest(payload) {
       try {
         body = await res.json();
       } catch {}
-      throw new Error(body.message || `Error ${res.status} en generación`);
+      throw new Error(body.message || `Error ${res.status} in generation`);
     }
 
     return await res.json();
   } catch (error) {
-    console.error("Error en GeminiService:", error);
-    throw new Error(error.message || "Error de conexión con el servidor.");
+    console.error("Server connection error:", error);
+    throw new Error(error.message || "Server connection error.");
   }
 }

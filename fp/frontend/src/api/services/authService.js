@@ -2,16 +2,10 @@
 const BASE_URL = "http://localhost:5000/api/v1/auth";
 
 
-/**
- * Envía las credenciales al backend y obtiene el token JWT si son válidas.
- * @param {string} email
- * @param {string} password
- * @returns {Promise<Object>} Datos de respuesta del backend (token, usuario, etc.)
- */
 export const loginUser = async (email, password) => {
   try {
     if (!email || !password) {
-      throw new Error("Usuario o contraseña no proporcionados.");
+      throw new Error("Username or password not provided.");
     }
 
     const response = await fetch(`${BASE_URL}/login`, {
@@ -19,32 +13,28 @@ export const loginUser = async (email, password) => {
       headers: {
         "Content-Type": "application/json",
       },
-      credentials: "include", // Permite cookies/CORS si las hubiera
+      credentials: "include", 
       body: JSON.stringify({ email, password }),
     });
 
     if (!response.ok) {
       const errorText = await response.text();
-      throw new Error(`Error al iniciar sesión: ${errorText}`);
+      throw new Error(`Login Error: ${errorText}`);
     }
 
     const data = await response.json();
-    console.log("Respuesta del servidor (login):", data);
+    console.log("Server Response (login):", data);
     return data;
   } catch (error) {
-    console.error("Error en loginUser:", error.message);
+    console.error("Error in loginUser:", error.message);
     throw error;
   }
 };
 
-/**
- * Obtiene el perfil del usuario autenticado usando el token JWT.
- * @param {string} token
- * @returns {Promise<Object>} Datos del perfil de usuario
- */
+
 export const getProfile = async (token) => {
   try {
-    if (!token) throw new Error("Token no encontrado.");
+    if (!token) throw new Error("Token not found.");
 
     const response = await fetch(`${BASE_URL}/profile`, {
       method: "GET",
@@ -55,7 +45,7 @@ export const getProfile = async (token) => {
     });
 
     if (!response.ok) {
-      throw new Error("No se pudo obtener el perfil del usuario.");
+      throw new Error("Could not fetch user profile.");
     }
 
     const data = await response.json();
@@ -66,9 +56,7 @@ export const getProfile = async (token) => {
   }
 };
 
-/**
- * Cierra la sesión del usuario eliminando el token del almacenamiento local.
- */
+
 export const logoutUser = () => {
   localStorage.removeItem("token");
 };

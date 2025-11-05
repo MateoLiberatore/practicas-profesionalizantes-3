@@ -9,10 +9,10 @@ function CodeOutput({ code, onClear, loading }) {
 
     try {
       await navigator.clipboard.writeText(code);
-      alert("¡Código copiado al portapapeles!");
+      alert("Code copied to clipboard!");
     } catch (err) {
-      console.error('Error al copiar el texto: ', err);
-      alert("Error al copiar el código.");
+      console.error("Error copying text:", err);
+      alert("Error copying text");
     }
   }
 
@@ -23,7 +23,7 @@ function CodeOutput({ code, onClear, loading }) {
   return (
     <div className="code-output-container slide-fade-in w-full">
       <div className="code-output-header">
-        <h2 className="code-output-title">&gt; Código Generado</h2>
+        <h2 className="code-output-title">&gt; Generated Code</h2>
         <div className="code-output-actions">
           <Button onClick={handleCopyClick} type="primary" disabled={!code}>
             <Copy size={16} />
@@ -44,7 +44,7 @@ function CodeOutput({ code, onClear, loading }) {
         </pre>
       ) : (
         <p className="text-secondary-400 text-center py-4">
-          Aún no se ha generado código.
+          No code has been generated yet.
         </p>
       )}
     </div>

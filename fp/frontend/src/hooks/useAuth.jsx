@@ -23,7 +23,6 @@ export const AuthProvider = ({ children }) => {
     }
   }, []);
 
-  // ✅ Login
   const handleLogin = async (email, password) => {
     try {
       const data = await loginUser(email, password);
@@ -33,12 +32,11 @@ export const AuthProvider = ({ children }) => {
         setUser(profile);
       }
     } catch (err) {
-      console.error("Error al iniciar sesión:", err);
-      alert("Credenciales inválidas");
+      console.error("Login Error:", err);
+      alert("Invalid Credentials");
     }
   };
 
-  // ✅ Logout
   const handleLogout = () => {
     localStorage.removeItem("token");
     setUser(null);

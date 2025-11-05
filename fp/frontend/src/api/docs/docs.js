@@ -1,40 +1,40 @@
 const docs = {
   "apiName": "PreCode Generator API",
   "version": "v1",
-  "description": "API REST para autenticación de usuarios y generación de código mediante Gemini.",
+  "description": "REST API user auth y code generation by use of Gemini API.",
   "basePath": "/api/v1",
   "endpoints": [
     {
       "path": "/auth/login",
       "method": "POST",
-      "summary": "Iniciar sesión y obtener token JWT",
+      "summary": "login and creation of token JWT",
       "tags": ["Auth"],
       "security": "None",
       "request": {
         "contentType": "application/json",
         "body": {
           "email": {"type": "string", "required": true, "description": "User Email.", "example": "user@example.com"},
-          "password": {"type": "string", "required": true, "description": "Contraseña del usuario.", "example": "mypassword"}
+          "password": {"type": "string", "required": true, "description": "User password.", "example": "mypassword"}
         }
       },
       "response": {
         "200": {
-          "description": "Inicio de sesión exitoso.",
+          "description": "Login succesfull.",
           "body": {
-            "message": {"type": "string", "example": "Inicio de sesión exitoso"},
-            "token": {"type": "string", "description": "JSON Web Token para rutas protegidas.", "example": "eyJhb..."},
-            "user": {"type": "object", "description": "Datos básicos del usuario.", "fields": {"id": "number", "username": "string", "email": "string"}}
+            "message": {"type": "string", "example": "Login succesfull."},
+            "token": {"type": "string", "description": "JSON Web Token for protected routes.", "example": "eyJhb..."},
+            "user": {"type": "object", "description": "Basic user data.", "fields": {"id": "number", "username": "string", "email": "string"}}
           }
         },
-        "400": {"description": "Petición inválida. Faltan campos."},
-        "401": {"description": "Credenciales inválidas."},
-        "404": {"description": "Usuario no existe."}
+        "400": {"description": "Invalid request. Missing fields."},
+        "401": {"description": "Invalid credentials."},
+        "404": {"description": "User does not exist."}
       }
     },
     {
       "path": "/auth/profile",
       "method": "GET",
-      "summary": "Obtener perfil del usuario autenticado",
+      "summary": "Obtain auth. user datas",
       "tags": ["Auth"],
       "security": "JWT Bearer Token",
       "request": {
@@ -42,46 +42,46 @@ const docs = {
       },
       "response": {
         "200": {
-          "description": "Perfil obtenido.",
+          "description": "Obtained profile.",
           "body": {
             "user": {"type": "object", "description": "Datos del perfil.", "fields": {"id": "number", "username": "string", "email": "string"}}
           }
         },
-        "401": {"description": "No autorizado. Token faltante o inválido."}
+        "401": {"description": "Not authorized. Invalid or missing Token."}
       }
     },
     {
       "path": "/gemini/process",
       "method": "POST",
-      "summary": "Generación de código por IA",
+      "summary": "Code generation by IA",
       "tags": ["Gemini", "AI"],
       "security": "JWT Bearer Token",
       "request": {
         "contentType": "application/json",
         "headers": {"Authorization": {"type": "string", "required": true, "description": "Bearer <jwt_token>"}},
         "body": {
-          "task_type": {"type": "string", "required": true, "description": "Tipo de tarea a realizar.", "example": "code_generation"},
+          "task_type": {"type": "string", "required": true, "description": "Required task.", "example": "code_generation"},
           "data": {
             "type": "object",
             "required": true,
-            "description": "Configuración para la tarea de generación.",
+            "description": "Task configuration.",
             "fields": {
               "target_language": {"type": "string", "required": true, "example": "Python"},
-              "user_instructions": {"type": "string", "required": true, "example": "Crear una clase con un constructor."},
-              "context_headers": {"type": "object", "required": false, "description": "Restricciones de clase/métodos."},
-              "style_config": {"type": "object", "required": false, "description": "Estilo de código (ej. snake_case)."}
+              "user_instructions": {"type": "string", "required": true, "example": "Crate a class with a constructor."},
+              "context_headers": {"type": "object", "required": false, "description": "Class restrictions/methods."},
+              "style_config": {"type": "object", "required": false, "description": "Code style (ej. snake_case)."}
             }
           }
         }
       },
       "response": {
         "200": {
-          "description": "Código generado exitosamente.",
-          "body": {"code": {"type": "string", "description": "El código fuente generado por Gemini.", "example": "def my_class():\n  pass"}}
+          "description": "Code generated succesfully.",
+          "body": {"code": {"type": "string", "description": "Code generated by Gemini.", "example": "def my_class():\n  pass"}}
         },
-        "400": {"description": "Petición inválida. Faltan campos obligatorios."},
-        "401": {"description": "No autorizado. Token inválido."},
-        "500": {"description": "Error en la API de Gemini o interno del servidor."}
+        "400": {"description": "Invalid request. Missing required fields."},
+        "401": {"description": "Not authorized. Invalid Token."},
+        "500": {"description": "Gemini API or Internal Server Error."}
       }
     }
   ]

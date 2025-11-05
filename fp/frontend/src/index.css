@@ -4,7 +4,7 @@ body {
   @apply overflow-y-scroll;
 }
 
-/* ==================== PALETA DE COLORES ==================== */
+/* ==================== COLOR THEME ==================== */
 @theme {
   --color-primary-100: #f0f9ff;
   --color-primary-200: #e0f2fe;
@@ -40,7 +40,7 @@ body {
   --color-text-dark: oklch(14.5% 0 0);
 }
 
-/* ==================== COMPONENTES EXISTENTES ==================== */
+/* ==================== EXISTING COMPONENTS ==================== */
 
 @utility collapsible-section {
   @apply rounded-2xl p-0.5 mb-4 shadow-[0_0px_30px_rgba(0,0,0,0.1)] shadow-secondary-800;
@@ -165,7 +165,7 @@ body {
   @apply flex gap-2;
 }
 
-/* ==================== BOTONES ==================== */
+/* ==================== BUTTONS ==================== */
 
 @utility btn-primary {
   @apply bg-primary-500 text-secondary-900 font-semibold py-2 px-4 rounded-md
@@ -173,8 +173,8 @@ body {
 }
 
 @utility btn-secondary {
-  @apply bg-secondary-600 text-primary-100 font-semibold py-2 px-4 rounded-md
-         transition duration-300 hover:bg-secondary-900 hover:text-secondary-200 active:scale-[0.98];
+  @apply bg-secondary-800 text-primary-100 font-semibold py-2 px-4 rounded-md
+         transition duration-300 hover:bg-gray-900 hover:text-secondary-200 active:scale-[0.98];
 }
 
 @utility btn-danger {
@@ -182,7 +182,7 @@ body {
          transition duration-300 hover:bg-terciary-800 hover:text-terciary-200 active:scale-[0.98];
 }
 
-/* ==================== ANIMACIONES ==================== */
+/* ==================== ANIMATIONS ==================== */
 
 @keyframes fadeIn {
   0% { opacity: 0; transform: translateY(5px); }

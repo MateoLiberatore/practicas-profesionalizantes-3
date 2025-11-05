@@ -2,10 +2,6 @@
 import React from "react";
 import Login from "./Login";
 
-/**
- * @component LoginContainer
- * @description Contenedor visual del formulario de Login.
- */
 function LoginContainer() {
 
   return (

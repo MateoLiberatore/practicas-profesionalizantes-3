@@ -8,7 +8,8 @@ function SocialLink({ Icon, href, label }) {
             target="_blank" 
             rel="noopener noreferrer" 
             aria-label={label}
-            className="text-primary-500 hover:text-primary-700 transition duration-300 transform hover:scale-110 flex items-center gap-2"
+            className="text-primary-500 hover:text-primary-700 transition duration-300 
+            transform hover:scale-110 flex items-center gap-2"
         >
             <Icon className="text-2xl" />
             <span className="hidden md:inline text-secondary-900 font-medium">{label}</span>

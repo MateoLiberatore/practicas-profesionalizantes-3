@@ -3,10 +3,6 @@ import React from "react";
 import Button from "../UI/Button";
 import { useAuth } from "../../hooks/useAuth";
 
-/**
- * @component NavBar
- * @description Barra de navegación con título y botón de logout.
- */
 function NavBar() {
   const { handleLogout } = useAuth();
 
@@ -20,7 +16,7 @@ function NavBar() {
       <Button
         onClick={handleLogoutClick}
         type="danger"
-        label="Cerrar sesión"
+        label="Logout"
       >
         Logout
       </Button>

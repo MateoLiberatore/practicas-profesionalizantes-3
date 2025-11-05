@@ -3,10 +3,6 @@ import InputControl from "../../components/UI/InputControl";
 import Button from "../../components/UI/Button";
 import { useAuth } from "../../hooks/useAuth";
 
-/**
- * @component Login
- * @description Formulario de inicio de sesión desacoplado del contenedor visual.
- */
 function Login() {
   const { handleLogin, isLoading, error } = useAuth();
   const [email, setEmail] = useState("");
@@ -32,7 +28,7 @@ function Login() {
 
       <InputControl
         type="email"
-        placeholder="Correo electrónico"
+        placeholder="@Email"
         value={email}
         onChange={handleEmailChange}
         inputClass="login-input"
@@ -43,7 +39,7 @@ function Login() {
 
       <InputControl
         type="password"
-        placeholder="Contraseña"
+        placeholder="Password"
         value={password}
         onChange={handlePasswordChange}
         inputClass="login-input"
@@ -57,7 +53,7 @@ function Login() {
         disabled={isLoading}
         className={`login-button ${isLoading ? "opacity-70 cursor-not-allowed" : ""}`}
       >
-        {isLoading ? "Iniciando..." : "Ingresar"}
+        {isLoading ? "Loggin in..." : "Login"}
       </Button>
 
       {error && <p className="login-error">{error}</p>}

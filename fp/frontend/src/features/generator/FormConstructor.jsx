@@ -5,11 +5,6 @@ import Button from "../../components/UI/Button";
 import ListItem from "../../components/UI/ListItem";
 import { useFormConstructor } from "../../hooks/useFormConstructor";
 
-/**
- * @component FormConstructor
- * Usa el patrón fallback + props (igual que antes).
- * Los botones 'Eliminar' en las listas ocupan la mitad del ancho por el grid 2-col.
- */
 function FormConstructor(props) {
   const fallback = useFormConstructor();
 
@@ -65,21 +60,21 @@ function FormConstructor(props) {
   return (
     <CollapsibleSection title=">Constructor">
       <div className="class-constructor">
-        {/* Nombre de clase */}
+
         <div className="col-span-full md:col-span-2 form-field-container">
-          <label className="label-style">Nombre de Clase</label>
+          <label className="label-style">Class Name</label>
           <InputControl
             value={className}
             onChange={handleClassNameChange}
-            placeholder="Nombre_de_clase>"
+            placeholder="Class_name>"
             className="input-container flex-1 text-primary-400 w-1/2"
             classInput="input-style"
           />
         </div>
 
-        {/* Parámetros */}
+
         <div className="form-field-container">
-          <label className="label-style">Parámetros del Constructor</label>
+          <label className="label-style">Constructor Parameters</label>
           <div className="space-y-2 mt-2">
             {params.map((p, i) => (
               <ListItem key={i} label={p} onRemove={() => handleRemoveParamClick(i)} />
@@ -89,19 +84,18 @@ function FormConstructor(props) {
             <InputControl
               value={newParam}
               onChange={handleParamInputChange}
-              placeholder="Nuevo_parámetro>"
+              placeholder="New_Parameter>"
               className="input-container flex-1"
               classInput="input-style"
             />
             <Button onClick={handleAddParamClick} className="header-add-button">
-              Agregar
+              Add
             </Button>
           </div>
         </div>
 
-        {/* Propiedades */}
         <div className="form-field-container">
-          <label className="label-style">Propiedades de Clase</label>
+          <label className="label-style">Class Properties</label>
           <div className="space-y-2 mt-2">
             {properties.map((p, i) => (
               <ListItem key={i} label={p} onRemove={() => handleRemovePropertyClick(i)} />
@@ -111,12 +105,12 @@ function FormConstructor(props) {
             <InputControl
               value={newProperty}
               onChange={handlePropertyInputChange}
-              placeholder="Nueva_propiedad>"
+              placeholder="New_Property>"
               className="input-container flex-1"
               classInput="input-style"
             />
             <Button onClick={handleAddPropertyClick} className="header-add-button">
-              Agregar
+              Add
             </Button>
           </div>
         </div>

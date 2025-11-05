@@ -8,9 +8,9 @@ function ApiDocs() {
   return (
     <div className="page-container">
       <div className="nav-bar">
-        <h1 className="nav-title">Documentación API</h1>
+        <h1 className="nav-title">API Documentation</h1>
         <Link to="/" className="btn-secondary">
-          ← Volver a Landing
+          ← Back to Landing
         </Link>
       </div>
 
@@ -25,7 +25,7 @@ function ApiDocs() {
                 <span className="mr-2 font-mono uppercase text-lg p-1 rounded bg-secondary-800 text-primary-300">{endpoint.method}</span>
                 {endpoint.path}
               </h3>
-              <p className="text-primary-300 mb-2">{endpoint.summary} (Seguridad: {endpoint.security})</p>
+              <p className="text-primary-300 mb-2">{endpoint.summary} (Security: {endpoint.security})</p>
               
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4 text-sm">
                 
@@ -37,7 +37,7 @@ function ApiDocs() {
                 </div>
 
                 <div className="bg-secondary-800 p-3 rounded">
-                    <h4 className="font-bold text-primary-200 mb-1">Códigos de Respuesta</h4>
+                    <h4 className="font-bold text-primary-200 mb-1">Response Codes:</h4>
                     {Object.entries(endpoint.response).map(([code, res]) => (
                         <div key={code} className="mb-2">
                             <span className="font-bold mr-1 text-primary-500">{code}:</span>

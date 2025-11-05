@@ -7,7 +7,7 @@ import ApiDocs from "./pages/Docs";
 function App() {
   const { user, isInitialized } = useAuth();
 
-  if (!isInitialized) return <div>Cargando...</div>;
+  if (!isInitialized) return <div>Loading...</div>;
 
   return (
     <Router>

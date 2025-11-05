@@ -30,7 +30,7 @@ function ClassBuilder({ onGenerate, loading }) {
 
   return (
     <div className="class-builder-container w-full">
-      <h2 className="text-4xl font-bold mb-6 text-center">&gt; Generador de Clases</h2>
+      <h2 className="text-4xl font-bold mb-6 text-center">&gt; Class Generator</h2>
 
       <div className="grid grid-cols-1 gap-4">
         <FormHeaders {...headersState} />
@@ -40,7 +40,7 @@ function ClassBuilder({ onGenerate, loading }) {
 
       <div className="flex justify-end mt-4 gap-3">
         <Button onClick={handleGenerateClick} loading={loading} type="primary">
-          Generar Código
+          Generate Code
         </Button>
       </div>
     </div>

@@ -5,11 +5,6 @@ import Button from "../../components/UI/Button";
 import ListItem from "../../components/UI/ListItem";
 import { useFormHeaders } from "../../hooks/useFormHeaders";
 
-/**
- * @component FormHeaders
- * Mantiene la estructura desacoplada (fallback hook + props opcionales).
- * Corrige el handler de eliminación de especificaciones.
- */
 function FormHeaders(props) {
   const fallback = useFormHeaders();
 
@@ -65,19 +60,18 @@ function FormHeaders(props) {
   return (
     <CollapsibleSection title=">Headers">
       <div className="class-headers">
-        {/* Lenguaje */}
+
         <div className="col-span-full md:col-span-2 form-field-container">
-          <label className="label-style">Lenguaje</label>
+          <label className="label-style">Languaje</label>
           <InputControl
-            placeholder="Lenguaje >"
+            placeholder="Language>"
             value={language}
             onChange={handleLanguageChange}
-            className="input-container w-1/2"
+            className="input-container w-1/2 mt-1"
             classInput="input-style"
           />
         </div>
 
-        {/* Imports */}
         <div className="form-field-container">
           <label className="label-style">Imports</label>
           {imports.length > 0 && (
@@ -89,21 +83,20 @@ function FormHeaders(props) {
           )}
           <div className="form-add-row">
             <InputControl
-              placeholder="Nuevo import >"
+              placeholder="New_Import>"
               value={newImport}
               onChange={handleImportInputChange}
               className="input-container"
               classInput="input-style"
             />
             <Button onClick={handleAddImportClick} className="header-add-button">
-              Agregar
+              Add
             </Button>
           </div>
         </div>
 
-        {/* Especificaciones */}
         <div className="form-field-container">
-          <label className="label-style">Especificaciones</label>
+          <label className="label-style">Specifications</label>
           {specs.length > 0 && (
             <div className="space-y-2 mt-2">
               {specs.map((item, i) => (
@@ -113,14 +106,14 @@ function FormHeaders(props) {
           )}
           <div className="form-add-row">
             <InputControl
-              placeholder="Nueva especificación >"
+              placeholder="New_Specification>"
               value={newSpec}
               onChange={handleSpecInputChange}
               className="input-container"
               classInput="input-style"
             />
             <Button onClick={handleAddSpecClick} className="header-add-button">
-              Agregar
+              Add
             </Button>
           </div>
         </div>

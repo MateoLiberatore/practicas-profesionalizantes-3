@@ -70,18 +70,18 @@ function FormMethods(props) {
   return (
     <CollapsibleSection title=">Methods">
       <div className="class-methods">
-        <label className="label-style">Nuevo Método</label>
+        <label className="label-style">New Method</label>
 
         <div className="flex gap-2 items-baseline mb-6">
           <InputControl
             value={newMethod}
             onChange={handleNewMethodChange}
-            placeholder="Nuevo_metodo>"
+            placeholder="New_Method>"
             className="input-container flex-1"
             classInput="input-style"
           />
           <Button type="primary" onClick={handleAddNewMethod} className="header-add-button">
-            Crear Método
+            Create Method
           </Button>
         </div>
 
@@ -90,18 +90,18 @@ function FormMethods(props) {
             <CollapsibleSection
               key={i}
               className="bg-secondary-600 p-0"
-              title={">" + (method.name || `Método ${i + 1}`)}
+              title={">" + (method.name || `Method ${i + 1}`)}
               defaultOpen={true}
             >
               <div className="method-content bg-secondary-300 p-5 rounded-lg">
                 <div className="grid grid-cols-2 gap-4">
                   <div className="form-field-container">
-                    <label className="label-style text-lg">Nombre del Método</label>
+                    <label className="label-style text-lg">Method Name</label>
                     <InputControl
                       value={method.name}
                       data-index={i}
                       onChange={handleNameChange}
-                      placeholder="Nombre_del_metodo>"
+                      placeholder="Method_name>"
                       className="input-container flex-1"
                       classInput="input-style"
                     />
@@ -110,7 +110,7 @@ function FormMethods(props) {
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
                   <div className="form-field-container">
-                    <label className="label-style text-lg">Parámetros</label>
+                    <label className="label-style text-lg">Parameters</label>
                     {method.params.length > 0 && (
                       <div className="space-y-2 mt-2">
                         {method.params.map((p, pIdx) => (
@@ -126,18 +126,18 @@ function FormMethods(props) {
                       <InputControl
                         value={newMethodParams[i] || ""}
                         onChange={(e) => handleParamInputChange(e, i)}
-                        placeholder="Nuevo_parámetro>"
+                        placeholder="New_parameter>"
                         className="input-container flex-1"
                         classInput="input-style"
                       />
                       <Button onClick={() => handleAddParamClick(i)} className="header-add-button">
-                        Agregar
+                        Add
                       </Button>
                     </div>
                   </div>
 
                   <div className="form-field-container">
-                    <label className="label-style text-lg">Tareas</label>
+                    <label className="label-style text-lg">Tasks</label>
                     {method.tasks.length > 0 && (
                       <div className="space-y-2 mt-2">
                         {method.tasks.map((t, tIdx) => (
@@ -153,32 +153,32 @@ function FormMethods(props) {
                       <InputControl
                         value={newMethodTasks[i] || ""}
                         onChange={(e) => handleTaskInputChange(e, i)}
-                        placeholder="Nueva_tarea>"
+                        placeholder="New_task>"
                         className="input-container flex-1"
                         classInput="input-style"
                       />
                       <Button onClick={() => handleAddTaskClick(i)} className="header-add-button">
-                        Agregar
+                        Add
                       </Button>
                     </div>
                   </div>
                 </div>
 
                 <div className="col-span-full form-field-container mt-4">
-                  <label className="label-style text-lg">Tipo de Retorno</label>
+                  <label className="label-style text-lg ">Return Type</label>
                   <InputControl
                     value={method.returnValue}
                     data-index={i}
                     onChange={handleReturnChangeValue}
-                    placeholder="Valor_de_retorno>"
-                    className="input-container flex-1 w-3/4"
+                    placeholder="Return>"
+                    className="input-container flex-1 w-3/4 mt-0.5"
                     classInput="input-style"
                   />
                 </div>
 
                 <div className="form-field-container flex items-end justify-end">
                   <Button type="danger" onClick={() => handleRemoveMethodClick(i)}>
-                    Eliminar Método
+                    Delete Method
                   </Button>
                 </div>
               </div>

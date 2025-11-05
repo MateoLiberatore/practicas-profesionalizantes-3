@@ -1,9 +1,5 @@
 import React, { createContext, useContext, useState } from "react";
 
-/**
- * @context GeneratorContext
- * @description Almacena y comparte el estado global del generador.
- */
 const GeneratorContext = createContext();
 
 export function GeneratorProvider({ children }) {

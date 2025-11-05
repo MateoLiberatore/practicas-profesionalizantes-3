@@ -14,7 +14,7 @@ function LandingPage() {
   };
 
   if (!isInitialized) {
-    return <div className="text-center text-primary-300 mt-10">Cargando...</div>;
+    return <div className="text-center text-primary-300 mt-10">Loading...</div>;
   }
 
   if (user) {
@@ -31,22 +31,22 @@ function LandingPage() {
           
           <div className="grid grid-cols-3 gap-8">
             <Card 
-              title="Documentación API" 
+              title="API Docs" 
               link="/docs" 
               className=""
-              description="Explora todos los endpoints, métodos, parámetros y respuestas de nuestra API REST." 
+              description="Explore all endpoints, methods, parameters, and responses of our REST API." 
             />
             <Card 
-              title="GitHub BackEnd" 
+              title="BackEnd - GitHub" 
               link={githubLinks.backend} 
               className=""
-              description="Accede al código fuente del servidor (Flask/Python) y modelos de IA." 
+              description="Access the source code for the server (Flask/Python) and AI models." 
             />
             <Card 
-              title="GitHub FrontEnd" 
+              title="FrontEnd - GitHub" 
               link={githubLinks.frontend} 
               className=""
-              description="Explora el código de la interfaz de usuario (React/Tailwind CSS)." 
+              description="Explore the code for the user interface (React/Tailwind CSS)." 
             />
           </div>
 

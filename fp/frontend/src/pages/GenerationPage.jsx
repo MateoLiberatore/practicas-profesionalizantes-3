@@ -13,7 +13,7 @@ function GenerationPage() {
   const [generatedCode, setGeneratedCode] = useState("");
   const [loading, setLoading] = useState(false);
 
-  if (!isInitialized) return <div className="text-center text-primary-100 mt-10">Cargando...</div>;
+  if (!isInitialized) return <div className="text-center text-primary-100 mt-10">Loading...</div>;
   if (!user) return <Navigate to="/" replace />;
 
   async function handleGenerateCode(formData) {

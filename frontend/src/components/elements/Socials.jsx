@@ -26,7 +26,7 @@ function SocialLink({ Icon, href, label, disabled }) {
             return;
         }
         
-        if (isEmail) {
+        if (isEmail) {  
             handleCopy(e);
         }
     };

@@ -63,5 +63,4 @@ def show_all_users():
 
     conn.close()
 
-show_all_users()
 

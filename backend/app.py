@@ -16,7 +16,13 @@ app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY')
 # Global CORS
 CORS(
     app,
-    resources={r"/api/*": {"origins": "http://localhost:5173"}},
+    resources={r"/api/*": {
+        "origins": [
+            "http://localhost:5173", 
+            "http://127.0.0.1:5173",
+            "http://frontend:5173"  # ← docker container
+        ]
+    }},
     supports_credentials=True,
     expose_headers=["Authorization"],
 )

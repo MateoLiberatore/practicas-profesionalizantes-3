@@ -1,26 +1,24 @@
 import os
-from flask import Flask, jsonify
+from flask import Flask
 from flask_cors import CORS
 from dotenv import load_dotenv
 
 from src.routes.auth.auth_routes import auth_bp
 from src.routes.llm.gemini_route import gemini_bp
-
 from src.utils.error_handler import register_error_handlers
-from src.configs.db import db_generation, generate_test_data
+from src.configs.db import db_generation
 
 load_dotenv()
 app = Flask(__name__)
-app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY') 
+app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY')
 
-# Global CORS
 CORS(
     app,
     resources={r"/api/*": {
         "origins": [
-            "http://localhost:5173", 
+            "http://localhost:5173",
             "http://127.0.0.1:5173",
-            "http://frontend:5173"  # ← docker container
+            "http://frontend:5173"
         ]
     }},
     supports_credentials=True,
@@ -28,7 +26,6 @@ CORS(
 )
 
 db_generation()
-
 
 app.register_blueprint(auth_bp, url_prefix="/api/v1/auth")
 app.register_blueprint(gemini_bp, url_prefix="/api/v1/gemini")
@@ -40,4 +37,4 @@ def home():
     return "API is running."
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    app.run(host="0.0.0.0", port=5000, debug=True)

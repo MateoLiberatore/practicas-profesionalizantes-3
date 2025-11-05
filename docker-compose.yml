@@ -1,27 +1,30 @@
-version: "3.9"
-
 services:
   backend:
-    build: ./backend
+    build:
+      context: ./backend
     container_name: precode-backend
     ports:
       - "5000:5000"
-    env_file:
-      - ./backend/.env
+    environment:
+      - FLASK_ENV=development
+      - SECRET_KEY=${SECRET_KEY}
+      - DATABASE_URL=sqlite:///./instance/app.db
     volumes:
       - ./backend:/app
-    restart: unless-stopped
+    depends_on:
+      - frontend
 
   frontend:
-    build: ./frontend
+    build:
+      context: ./frontend
     container_name: precode-frontend
     ports:
       - "5173:5173"
-    env_file:
-      - ./frontend/.env
+    environment:
+      - VITE_API_URL=http://localhost:5000/api
     volumes:
       - ./frontend:/app
       - /app/node_modules
-    depends_on:
-      - backend
-    restart: unless-stopped
+
+volumes:
+  db_data:

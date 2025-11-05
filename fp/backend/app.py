@@ -13,7 +13,7 @@ load_dotenv()
 app = Flask(__name__)
 app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY') 
 
-# CORS global 
+# Global CORS
 CORS(
     app,
     resources={r"/api/*": {"origins": "http://localhost:5173"}},
@@ -30,7 +30,7 @@ register_error_handlers(app)
 
 @app.route('/')
 def home():
-    return "API está en funcionamiento."
+    return "API is running."
 
 if __name__ == "__main__":
     app.run(debug=True)

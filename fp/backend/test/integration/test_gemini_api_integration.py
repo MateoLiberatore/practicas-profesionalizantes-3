@@ -11,7 +11,7 @@ pytestmark = pytest.mark.integration
 def gemini_client():
     api_key = os.getenv("GEMINI_API_KEY")
     if not api_key:
-        pytest.skip("GEMINI_API_KEY no configurada, se omite test real.")
+        pytest.skip("GEMINI_API_KEY not configured, skipping real test.")
     return get_gemini_client()
 
 
@@ -22,7 +22,7 @@ def test_gemini_client_initialization(gemini_client):
 def test_handle_code_generation_real_call(gemini_client):
     data = {
         "target_language": "Python",
-        "user_instructions": "crea una función que sume dos números y devuelva el resultado"
+        "user_instructions": "create a function that adds two numbers and returns the result"
     }
     response = handle_code_generation(data)
     assert "code" in response
@@ -36,7 +36,7 @@ def test_process_gemini_task_full_flow(gemini_client):
         "task_type": "code_generation",
         "data": {
             "target_language": "Python",
-            "user_instructions": "genera una clase que represente un rectángulo con métodos para calcular área y perímetro"
+            "user_instructions": "generate a class that represents a rectangle with methods to calculate area and perimeter"
         }
     }
     response = process_gemini_task(payload)
@@ -58,4 +58,4 @@ def test_handle_code_generation_with_invalid_key(monkeypatch):
         handle_code_generation(data)
 
     assert e.value.status_code == 500
-    assert "Error en la API de Gemini" in e.value.message
+    assert "Error in the Gemini API" in e.value.message

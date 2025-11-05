@@ -11,11 +11,11 @@ class Gemini_Controller:
         try:
             response = process_gemini_task(payload)
             return response
-        except APIError as e: # errores 400 a 500 de IA
+        except APIError as e: # AI errors 400 to 500
             raise e
         except Exception as e:
-            # errores internos
-            print(f"Error interno en Gemini_Controller: {e}")
-            raise APIError("Error interno del servidor al procesar la tarea de IA.", status_code=500) # 
+            # internal errors
+            print(f"Internal error in Gemini_Controller: {e}")
+            raise APIError("Internal server error while processing the AI task.", status_code=500) 
 
 gemini_controller = Gemini_Controller()

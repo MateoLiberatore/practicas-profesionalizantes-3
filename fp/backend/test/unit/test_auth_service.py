@@ -23,7 +23,7 @@ def test_register_route_success(client):
     response = client.post('/auth/register', json=new_user_data)
     assert response.status_code == 201
     data = json.loads(response.data)
-    assert 'Registro exitoso' in data['message']
+    assert 'Registration successful' in data['message']
     assert data['user']['email'] == 'integration@example.com'
 
 def test_login_route_success(client):
@@ -34,7 +34,7 @@ def test_login_route_success(client):
     response = client.post('/auth/login', json=login_data)
     assert response.status_code == 200
     data = json.loads(response.data)
-    assert 'Login exitoso' in data['message']
+    assert 'Login successful' in data['message']
     assert 'token' in data['data']
     assert 'user' in data['data']
     assert 'password' not in data['data']['user']
@@ -49,13 +49,13 @@ def test_login_route_invalid_credentials(client):
     data = json.loads(response.data)
     assert data['status'] == 401
     assert data['error_type'] == 'UNAUTHORIZED'
-    assert 'Credenciales inválidas' in data['message']
+    assert 'Invalid credentials' in data['message']
 
 def test_access_profile_with_valid_jwt(client, auth_header):
     response = client.get('/auth/profile', headers=auth_header)
     assert response.status_code == 200
     data = json.loads(response.data)
-    assert 'Acceso exitoso' in data['message']
+    assert 'Successful access' in data['message']
     assert data['user']['email'] == 'test1@example.com'
     assert 'password' not in data['user']
 
@@ -64,7 +64,7 @@ def test_access_profile_without_jwt(client):
     assert response.status_code == 401
     data = json.loads(response.data)
     assert data['error_type'] == 'UNAUTHORIZED'
-    assert 'Token de autenticación faltante' in data['message']
+    assert 'Missing authentication token' in data['message']
 
 def test_access_profile_with_invalid_jwt(client):
     invalid_header = {'Authorization': 'Bearer a.b.c'}
@@ -72,7 +72,7 @@ def test_access_profile_with_invalid_jwt(client):
     assert response.status_code == 401
     data = json.loads(response.data)
     assert data['error_type'] == 'UNAUTHORIZED'
-    assert 'Token JWT inválido o corrupto' in data['message']
+    assert 'Invalid or corrupted JWT token' in data['message']
     
 def test_access_profile_with_expired_jwt(client, app):
     with app.app_context():
@@ -98,10 +98,10 @@ def test_access_profile_with_expired_jwt(client, app):
     assert response.status_code == 401
     data = json.loads(response.data)
     assert data['error_type'] == 'UNAUTHORIZED'
-    assert 'Token JWT ha expirado' in data['message']
+    assert 'JWT token has expired' in data['message']
     
 def test_logout_route_success(client, auth_header):
     response = client.post('/auth/logout', headers=auth_header)
     assert response.status_code == 200
     data = json.loads(response.data)
-    assert 'Sesión cerrada exitosamente' in data['message']
+    assert 'Session closed successfully' in data['message']

@@ -17,8 +17,8 @@ class AuthController:
         except APIError as e:
             raise e
         except Exception as e:
-            print(f"Error interno en AuthController: {e}") 
-            raise APIError("Error interno del servidor al procesar la tarea de autenticacion.", status_code=500)
+            print(f"Internal error in AuthController: {e}") 
+            raise APIError("Internal server error while processing the authentication task.", status_code=500)
     
     @staticmethod
     def handle_login(data):
@@ -30,5 +30,5 @@ class AuthController:
         except APIError as e:
             raise e
         except Exception as e:
-            print(f"Error interno en AuthController: {e}") 
-            raise APIError("Error interno del servidor al procesar la tarea de autenticacion.", status_code=500)
+            print(f"Internal error in AuthController: {e}") 
+            raise APIError("Internal server error while processing the authentication task.", status_code=500)

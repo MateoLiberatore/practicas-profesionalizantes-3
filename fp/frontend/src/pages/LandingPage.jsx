@@ -34,7 +34,7 @@ function LandingPage() {
               title="API Docs" 
               link="/docs" 
               className=""
-              description="Explore all endpoints, methods, parameters, and responses of our REST API." 
+              description="Explore all endpoints, methods, parameters, and responses of the REST API." 
             />
             <Card 
               title="BackEnd - GitHub" 

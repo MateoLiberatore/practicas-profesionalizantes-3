@@ -18,20 +18,20 @@ def login():
     password = data.get("password")
 
     if not email or not password:
-        raise APIError("Email o contraseña no proporcionados.", 400)
+        raise APIError("Email or password not provided.", 400)
     
     user = user_model.get_user_by_email(email)
 
     if not user:
-        raise APIError("El usuario no existe.", 404)
+        raise APIError("User does not exist.", 404)
     
     if not check_password_hash(user["password"], password):
-        raise APIError("Credenciales inválidas.", 401)
+        raise APIError("Invalid credentials.", 401)
     
     token = create_jwt_token(user["id"])
 
     return jsonify({
-        "message": "Inicio de sesión exitoso",
+        "message": "Login successful",
         "token": token,
         "user": {
             "id": user["id"],
@@ -49,7 +49,7 @@ def profile():
 
     user = g.current_user
     if not user:
-        raise APIError("Usuario no encontrado.", 404)
+        raise APIError("User not found.", 404)
 
     return jsonify({
         "user": {

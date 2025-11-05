@@ -46,7 +46,7 @@ def show_all_users():
     users = cursor.fetchall()
     
     if not users:
-        print("La tabla de usuarios está vacía.")
+        print("User table is empty.")
         return
 
     headers = users[0].keys()
@@ -63,4 +63,3 @@ def show_all_users():
 
     conn.close()
 
-show_all_users()

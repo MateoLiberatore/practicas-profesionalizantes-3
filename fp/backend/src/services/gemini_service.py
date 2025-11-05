@@ -18,18 +18,18 @@ def _generate_code_prompt(data: dict) -> tuple[str, str]:
     system_instruction = SYSTEM_INSTRUCTION_CODE_GENERATOR.format(language=language)
     
     if context_headers:
-        system_instruction += "\n\nRESTRICCIONES ESTRUCTURALES:"
+        system_instruction += "\n\nSTRUCTURAL RESTRICTIONS:"
         for key, value in context_headers.items():
             system_instruction += f"\n- {key.upper()}: {value}"
             
     if style_config:
-        system_instruction += "\n\nCONFIGURACIÓN DE ESTILO:"
+        system_instruction += "\n\nSTYLE CONFIGURATION:"
         for key, value in style_config.items():
-            system_instruction += f"\n- Estilo Requerido ({key.upper()}): {value}"
+            system_instruction += f"\n- Required Style ({key.upper()}): {value}"
 
     user_prompt = (
-        f"Usando el lenguaje {language}, genera el código que cumple con las siguientes instrucciones: \n\n"
-        f"Instrucciones del usuario: {user_instructions}"
+        f"Using the {language} language, generate the code that complies with the following instructions: \n\n"
+        f"User instructions: {user_instructions}"
     )
 
     return system_instruction, user_prompt
@@ -73,14 +73,14 @@ def handle_code_generation(data: dict) -> dict:
         status_code = 500
         if hasattr(e, 'response_json') and e.response_json and 'error' in e.response_json and 'code' in e.response_json['error']:
             status_code = e.response_json['error']['code']
-        raise APIError(f"Error en la API de Gemini. Mensaje original: {e}", status_code=status_code, response_json=None)
+        raise APIError(f"Error in the Gemini API. Original message: {e}", status_code=status_code, response_json=None)
     except Exception as e:
-        raise APIError(f"Error inesperado al comunicarse con Gemini: {e}", status_code=500, response_json=None)
+        raise APIError(f"Unexpected error communicating with Gemini: {e}", status_code=500, response_json=None)
     
     raw_code = response.text
 
     if not raw_code.strip():
-        raise APIError("Gemini no pudo generar código para las instrucciones proporcionadas.", status_code=500, response_json=None)
+        raise APIError("Gemini could not generate code for the provided instructions.", status_code=500, response_json=None)
 
     clean_code = _clean_generated_code(raw_code)
 
@@ -95,4 +95,4 @@ def process_gemini_task(payload: dict):
     if task_type == 'code_generation':
         return handle_code_generation(data)
 
-    raise APIError("Tipo de tarea de Gemini no soportado.", status_code=400, response_json=None)
+    raise APIError("Unsupported Gemini task type.", status_code=400, response_json=None)

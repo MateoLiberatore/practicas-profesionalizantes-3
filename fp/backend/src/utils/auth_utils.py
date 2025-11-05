@@ -10,7 +10,7 @@ from src.models.user_model import UserModel
 user_model_instance = UserModel()
 
 def get_secret_key():
-    """Obtiene la clave JWT desde config o .env"""
+    """Gets the JWT secret key from config or .env"""
     key = current_app.config.get('SECRET_KEY')
     if key:
         return key
@@ -20,11 +20,11 @@ def get_secret_key():
     return "default-jwt-secret-key"
 
 def create_jwt_token(user_id):
-    """Genera un JWT con expiración de 24 horas"""
+    """Generates a JWT with a 24-hour expiration"""
     try:
         secret_key = get_secret_key()
         if not secret_key :
-            raise ValueError("Clave secreta no configurada correctamente o inexistente.")
+            raise ValueError("Secret key not configured correctly or non-existent.")
 
         expiration_time = datetime.datetime.now(datetime.UTC) + datetime.timedelta(hours=24)
         payload = {
@@ -35,19 +35,19 @@ def create_jwt_token(user_id):
 
         return jwt.encode(payload, secret_key, algorithm='HS256')
     except Exception as e:
-        print(f"Error creando JWT: {e}")
-        raise APIError("Error interno al generar token JWT.", status_code=500)
+        print(f"Error creating JWT: {e}")
+        raise APIError("Internal error generating JWT token.", status_code=500)
 
 def jwt_required(f):
-    """Protege rutas con JWT. Permite OPTIONS (preflight CORS) sin ejecutar lógica."""
+    """Protects routes with JWT. Allows OPTIONS (CORS preflight) without executing logic."""
     @wraps(f)
     def decorated(*args, **kwargs):
-        # Permitir preflight CORS
+        # Allow CORS preflight
         if request.method == 'OPTIONS':
             response = jsonify({"message": "CORS preflight OK"})
             response.status_code = 200
             
-            # Cabeceras requeridas para validar el preflight
+            # Headers required to validate preflight
             response.headers.add('Access-Control-Allow-Origin', 'http://localhost:5173')
             response.headers.add('Access-Control-Allow-Methods', 'POST, OPTIONS')
             response.headers.add('Access-Control-Allow-Headers', 'Content-Type, Authorization')
@@ -58,7 +58,7 @@ def jwt_required(f):
 
         auth_header = request.headers.get('Authorization')
         if not auth_header or not auth_header.startswith('Bearer '):
-            raise APIError("Token faltante o formato inválido.", status_code=401)
+            raise APIError("Missing token or invalid format.", status_code=401)
 
         try:
             token = auth_header.split()[1]
@@ -67,25 +67,25 @@ def jwt_required(f):
             user_id = data.get('user_id')
 
             if not user_id:
-                raise APIError("Token JWT inválido.", status_code=401)
+                raise APIError("Invalid JWT token.", status_code=401)
 
             user_data = user_model_instance.get_user_by_id(user_id)
             if not user_data:
-                raise APIError("Usuario no encontrado.", status_code=401)
+                raise APIError("User not found.", status_code=401)
 
-            # Remover campo password
+            # Remove password field
             user_data.pop('password', None)
             g.current_user = user_data
 
         except ExpiredSignatureError:
-            raise APIError("Token expirado.", status_code=401)
+            raise APIError("Token expired.", status_code=401)
         
         except (InvalidSignatureError, DecodeError):
-            raise APIError("Token inválido o corrupto.", status_code=401)
+            raise APIError("Invalid or corrupted token.", status_code=401)
         
         except Exception as e:
-            print(f"Error JWT: {e}")
-            raise APIError("Error interno de autenticación.", status_code=401)
+            print(f"JWT Error: {e}")
+            raise APIError("Internal authentication error.", status_code=401)
 
         return f(*args, **kwargs)
     

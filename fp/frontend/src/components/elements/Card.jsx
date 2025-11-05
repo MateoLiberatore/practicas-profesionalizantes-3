@@ -12,7 +12,7 @@ function Card ({ title, description, link, className = "" }) {
         <p className="text-secondary-400">{description}</p>
       </div>
       <span className="mt-4 text-primary-500 font-semibold inline-block hover:text-primary-300">
-        {isExternal ? "Ver en GitHub →" : "Ver Documentación →"}
+        {isExternal ? "Check on GitHub →" : "See Docs →"}
       </span>
     </div>
   );

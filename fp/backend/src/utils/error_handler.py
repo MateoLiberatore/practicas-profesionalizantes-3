@@ -17,7 +17,7 @@ class APIError(Exception):
     def to_dict(self):
         rv = dict(self.payload or ())
         
-        # Mapeo de códigos de estado a tipos de error 
+        # Mapping of status codes to error types 
         error_type_mapping = {
             400: 'BAD_REQUEST',
             401: 'UNAUTHORIZED',
@@ -31,7 +31,7 @@ class APIError(Exception):
         rv['error_type'] = error_type_mapping.get(self.status_code, 'UNKNOWN_ERROR')
         rv['message'] = self.message
         
-        # Opcional: añadir detalles de respuesta si están presentes
+        # Optional: add response details if present
         if self.response_json:
             rv['details'] = self.response_json
             
@@ -49,9 +49,9 @@ def handle_exceptions(error):
         response.status_code = error.code
         return response
     
-    # Manejo de errores de código internos
-    print(f"Error Interno No Capturado: {error}")
-    response = jsonify({'error': 'Error interno del servidor. Consulte los logs.'})
+    # Internal code error handling
+    print(f"Uncaught Internal Error: {error}")
+    response = jsonify({'error': 'Internal server error. Check logs.'})
     response.status_code = 500
     return response
 

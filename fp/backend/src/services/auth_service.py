@@ -11,7 +11,7 @@ def register_user(data):
     password = data.get('password')
     
     if not username or not email or not password:
-        raise APIError("Faltan campos obligatorios.", status_code=400)
+        raise APIError("Missing required fields.", status_code=400)
     
     hashed_password = generate_password_hash(password)
     
@@ -34,4 +34,4 @@ def authenticate_user(email, password):
             "user": user_data
         }
 
-    raise APIError("Credenciales inválidas.", status_code=401)
+    raise APIError("Invalid credentials.", status_code=401)

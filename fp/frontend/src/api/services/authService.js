@@ -1,5 +1,5 @@
 
-const BASE_URL = "http://localhost:5000/api/v1/auth";
+const BASE_URL = `${import.meta.env.VITE_API_URL}/v1/auth`;
 
 
 export const loginUser = async (email, password) => {
@@ -23,7 +23,6 @@ export const loginUser = async (email, password) => {
     }
 
     const data = await response.json();
-    console.log("Server Response (login):", data);
     return data;
   } catch (error) {
     console.error("Error in loginUser:", error.message);

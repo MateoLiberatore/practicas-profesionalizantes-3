@@ -13,7 +13,7 @@ def db_generation():
             password VARCHAR(255) NOT NULL
         )
     ''')
-    
+    generate_test_data()
     conn.commit()
     conn.close()
 
@@ -62,4 +62,5 @@ def show_all_users():
     print("-" * (len(header_line) + 4))
 
     conn.close()
+
 

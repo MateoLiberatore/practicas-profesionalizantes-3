@@ -1,4 +1,4 @@
-const GEMINI_ENDPOINT = "http://localhost:5000/api/v1/gemini/process";
+const GEMINI_ENDPOINT = `${import.meta.env.VITE_API_URL}/v1/gemini/process`;  
 
 export async function sendCodeGenerationRequest(payload) {
   const token = localStorage.getItem("token");

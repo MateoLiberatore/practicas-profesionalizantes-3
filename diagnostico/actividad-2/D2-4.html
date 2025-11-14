@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+    <head>
+
+    </head>
+    <body>    
+
+     <script>
+
+        let flux = {
+            statements: [],
+            verifications: new Map(),
+            actions: new Map(),
+        }
+
+        let statement = 'Lamp dont work'
+        flux.statements.set(statement);
+
+        let verification = new Map();
+        verification.set('lamp plugged in?');
+        verification.set('bulb burned out?');
+
+        flux.verifications.set(verification);
+
+        let action = new Map();
+        action.set('plug in lamp');
+        action.set('replace bulb');
+        action.set('repair lamp');
+
+        flux.actions.set(action);
+     </script>
+        
+    </body>
+    </html>

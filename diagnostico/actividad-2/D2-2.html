@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+
+    </head>
+    <body>
+
+
+        <script>
+
+            let factura = {
+
+                encabezado_remitente : {
+                    tipo: "a",
+                    ejemplar: "original",
+                    nro_comprobante: 1234567892,
+                    fecha_de_emision: "dd/mm/yyyy",
+                    razon_social: "xxxxxxxxxxxxx",
+                    categoria: "responsable inscripto",
+                    CUIT: "20-99999999-1",
+                    direcccion: " una direcicion 1234",
+                    telefono: 123456789,
+                    ing_brutos: "30-22222222-9",
+                    inicio_actividad: "dd/mm/yyyy"
+                },
+
+                seccion_destinatario: {
+                    cliente: "SOL S.R.L",
+                    resp_iva: "responsable inscripto", 
+                    direcccion: " una direcicion 1234",
+                    CUIT: "30-11111111-8",
+                    condicion_de_venta: "una condicion"
+                },
+
+                productos : [
+                    {codigo: 1234, descripcion:"fernet", cantidad:2, u_medida:"750cc", precio_u: 1500, bonif:0.0, alicuota_IVA: 0.21, total:3000 },
+                    {codigo: 4321, descripcion:"ron", cantidad:2, u_medida:"750cc", precio_u: 1300, bonif:0.0, alicuota_IVA: 0.21, total:2600 }
+                ],
+
+                montos : {
+                    neto_gravado: 5555555,
+                    IVA_21: 1234,
+                    subtotal: 123456,
+                    importe_total: 123456,
+                    total_escrito: "el numero del total escrito sabe dios porque"
+                }
+            };
+  
+        </script>
+
+    </body>
+</html>

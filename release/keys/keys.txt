@@ -1,7 +1,0 @@
-
-back:
-GEMINI_API_KEY="AIzaSyBz5OCcoOAbTDfyVE_YgvBk0cLR3gSv5-c"
-SECRET_KEY="secretKey6ab6436fd9901331dedd73c34e587799391e346f2b83d3a0ef226ed30d399f52"
-
-front:
-VITE_API_URL="http://localhost:5000/api"

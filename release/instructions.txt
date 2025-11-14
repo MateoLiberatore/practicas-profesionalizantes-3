@@ -1,2 +1,0 @@
-1 - los dockerfiles estan ya colocados en cada seccion de front y back, los presentes solo son una copia de los mismos 
-2 - comando de docker-compose.yml: docker-compose up --build 

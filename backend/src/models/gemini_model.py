@@ -11,7 +11,7 @@ class GeminiRequestModel:
         missing = [f for f in required_fields if f not in data]
 
         if missing:
-            # [1] Missing mandatory fields for code generation in 'data': {', '.join(missing)}
+            # Missing mandatory fields for code generation in 'data': {', '.join(missing)}
             raise APIError(f"Missing mandatory fields for code generation in 'data': {', '.join(missing)}", status_code=400) 
 
         # Minimum requirement check "language"

@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import docs from "../api/docs/docs"
 
 function ApiDocs() {
-  const documentationJson = docs; // Usamos el objeto importado
+  const documentationJson = docs; 
 
   return (
     <div className="page-container">

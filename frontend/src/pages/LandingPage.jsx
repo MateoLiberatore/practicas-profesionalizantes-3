@@ -9,8 +9,8 @@ function LandingPage() {
   const { user, isInitialized } = useAuth();
 
   const githubLinks = {
-    backend: "https://github.com/MateoLiberatore/practicas-profesionalizantes-3/tree/main/fp/backend", 
-    frontend: "https://github.com/MateoLiberatore/practicas-profesionalizantes-3/tree/main/fp/frontend", 
+    backend: "https://github.com/MateoLiberatore/PreCode/tree/main/backend", 
+    frontend: "https://github.com/MateoLiberatore/PreCode/tree/main/frontend", 
   };
 
   if (!isInitialized) {

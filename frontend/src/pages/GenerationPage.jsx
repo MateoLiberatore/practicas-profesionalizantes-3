@@ -42,7 +42,7 @@ function GenerationPage() {
       const response = await sendCodeGenerationRequest(payload);
       setGeneratedCode(response.code || "");
     } catch (error) {
-      alert(error.message || "Error al generar código.");
+      alert(error.message || "Error on Code Generation.");
     } finally {
       setLoading(false);
     }
@@ -56,7 +56,6 @@ function GenerationPage() {
     <GeneratorProvider>
       <div className="page-container">
         <NavBar />
-
         <div className="aligned-pair">
           <ClassBuilder onGenerate={handleGenerateCode} loading={loading} />
           <CodeOutput code={generatedCode} onClear={handleClearCode} />
